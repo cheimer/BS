@@ -13,6 +13,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Engine/DamageEvents.h"
+#include "Engine/DataTable.h"
 #include "BrainComponent.h"
 
 
@@ -53,6 +54,12 @@ void ABSEnemyCharacter::BeginPlay()
 		AttackNotify->OnAttackNotifySignature.AddUObject(this, &ABSEnemyCharacter::OnAttack);
 	}
 
+	if (bUseDataTableEnemy)
+	{
+		check(DTEnemy);
+		SetEnemyDefault();
+	}
+
 	HealthComponent->OnDeathSignature.AddUObject(this, &ABSEnemyCharacter::OnDeath);
 
 	GetCharacterMovement()->MaxWalkSpeed = States.Speed;
@@ -89,7 +96,7 @@ void ABSEnemyCharacter::OnDeath(AActor* DeathActor)
 	GetCharacterMovement()->DisableMovement();
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-	SetLifeSpan(States.DeathEndTime);
+	SetLifeSpan(3.0f);
 
 	const auto EnemyController = Cast<AAIController>(GetController());
 	if (EnemyController && EnemyController->BrainComponent)
@@ -148,4 +155,24 @@ void ABSEnemyCharacter::SetActorRotationPlayer()
 	FVector PlayerLocation = Player->GetActorLocation();
 	FRotator NewRotation = (PlayerLocation - GetActorLocation()).Rotation();
 	SetActorRotation(NewRotation);
+}
+
+void ABSEnemyCharacter::SetEnemyDefault()
+{
+	if (EnemyName.IsEqual("")) return;
+
+	FEnemyState* DTEnemyState = DTEnemy->FindRow<FEnemyState>(EnemyName, "");
+	if (!DTEnemyState) return;
+
+	States.AttackDelay = DTEnemyState->AttackDelay;
+	States.AttackRange = DTEnemyState->AttackRange;
+	States.AttackType = DTEnemyState->AttackType;
+	States.Damage = DTEnemyState->Damage;
+	States.DefaultDropCoin = DTEnemyState->DefaultDropCoin;
+	States.DefaultDropMaterial = DTEnemyState->DefaultDropMaterial;
+	States.DropMultiplier = DTEnemyState->DropMultiplier;
+	States.Health = DTEnemyState->Health;
+	States.SearchRange = DTEnemyState->SearchRange;
+	States.Speed = DTEnemyState->Speed;
+
 }
