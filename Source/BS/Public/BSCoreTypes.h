@@ -1,4 +1,5 @@
 #pragma once
+#include "Engine/DataTable.h"
 #include "BSCoreTypes.generated.h"
 
 //DECLARE_LOG_CATEGORY_EXTERN(LogSetting, Log, All);
@@ -26,7 +27,7 @@ enum class EAttackMaterial : uint8
 };
 
 USTRUCT(BlueprintType)
-struct FAttackState
+struct FAttackState : public FTableRowBase
 {
 	GENERATED_USTRUCT_BODY()
 
@@ -43,7 +44,7 @@ struct FAttackState
 	float AttackDelay = 1.0f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "State", meta = (ToolTip = "Under 0 is Unlimited"))
-	int32 EnemyPass = -1;
+	int32 EnemyHitNum = -1;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "State", meta = (EditCondition = "AttackType == EAttackType::Melee"))
 	float AuraSize = 100.0f;
@@ -62,7 +63,7 @@ struct FAttackState
 // Enemy
 
 USTRUCT(BlueprintType)
-struct FEnemyState
+struct FEnemyState : public FTableRowBase
 {
 	GENERATED_USTRUCT_BODY()
 
@@ -71,9 +72,6 @@ struct FEnemyState
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "State")
 	float Health = 100.0f;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "State")
-	float DeathEndTime = 3.0f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "State", meta = (ToolTip = "Recommend X5"))
 	int32 DefaultDropMaterial = 10;

@@ -38,22 +38,33 @@ protected:
 	UFUNCTION()
 	void OnDeath(AActor* DeathActor);
 
+	UFUNCTION()
+	virtual void OnAttack(AActor* Attacker);
+
 	float GetDistancePlayer() const;
 
+	void SetEnemyDefault();
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	UBSHealthComponent* HealthComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	UBSItemDropComponent* ItemDropComponent;
 
-	UFUNCTION()
-	virtual void OnAttack(AActor* Attacker);
-
 	UPROPERTY(EditDefaultsOnly, Category = "Anim")
 	TArray<UAnimMontage*> AttackAnims;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Anim")
 	UAnimMontage* DeathAnim;
+
+	UPROPERTY(EditDefaultsOnly, Category = "State")
+	FName EnemyName = "";
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "State")
+	bool bUseDataTableEnemy = false;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "State")
+	class UDataTable* DTEnemy;
 
 private:
 	void SetActorRotationPlayer();

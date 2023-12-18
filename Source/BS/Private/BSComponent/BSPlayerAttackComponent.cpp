@@ -6,19 +6,26 @@
 #include "BSCoreTypes.h"
 #include "TimerManager.h"
 #include "NiagaraComponent.h"
+#include "Engine/DataTable.h"
 
 UBSPlayerAttackComponent::UBSPlayerAttackComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
 
-	AttackMaterialSetting();
 }
 
 void UBSPlayerAttackComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	AttackMaterialSetting();
+	if (bUseDataTableWeapon)
+	{
+		check(DTWeapon);
+		SetWeaponDefault();
+	}
 	SetAttackTypesTimer();
+
 }
 
 void UBSPlayerAttackComponent::PlayerAttack(ABSPlayerWeapon* PlayerWeapon, FAttackState WeaponState)
@@ -132,5 +139,27 @@ void UBSPlayerAttackComponent::AttackTypeEnforce(EAttackType AttackType)
 void UBSPlayerAttackComponent::AttackMaterialEnforce(EAttackMaterial AttackMaterial)
 {
 	*AttackMaterialLevel.Find(AttackMaterial) += 1;
+
+}
+
+void UBSPlayerAttackComponent::SetWeaponDefault()
+{
+	TArray<FName> AttackNames = DTWeapon->GetRowNames();
+
+	for (FName AttackName : AttackNames)
+	{
+		FAttackState* DTAttackState = DTWeapon->FindRow<FAttackState>(AttackName, "");
+		int index = AttackTypeToIndex(DTAttackState->AttackType);
+
+		WeaponData[index].AttackType = DTAttackState->AttackType;
+		WeaponData[index].AttackLevel = DTAttackState->AttackLevel;
+		WeaponData[index].AttackDelay = DTAttackState->AttackDelay;
+		WeaponData[index].DamageDefault = DTAttackState->DamageDefault;
+		WeaponData[index].EnemyHitNum = DTAttackState->EnemyHitNum;
+		WeaponData[index].AuraDefaultSize = DTAttackState->AuraDefaultSize;
+		WeaponData[index].AuraSize = DTAttackState->AuraSize;
+		WeaponData[index].SpellDefaultSize = DTAttackState->SpellDefaultSize;
+		WeaponData[index].SpellSize = DTAttackState->SpellSize;
+	}
 
 }

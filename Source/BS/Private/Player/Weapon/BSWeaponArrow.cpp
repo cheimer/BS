@@ -9,7 +9,7 @@
 ABSWeaponArrow::ABSWeaponArrow()
 {
 	AttackType = EAttackType::Arrow;
-	AttackState.EnemyPass = 1;
+	AttackState.EnemyHitNum = 1;
 }
 
 void ABSWeaponArrow::SetDefaultOption()
