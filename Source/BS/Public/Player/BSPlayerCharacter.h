@@ -14,6 +14,7 @@ class UInputMappingContext;
 class UInputAction;
 class UBSHealthComponent;
 class UBSPlayerAttackComponent;
+class UBSInvenComponent;
 
 UCLASS()
 class BS_API ABSPlayerCharacter : public ACharacter
@@ -28,6 +29,8 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	float GetHealth() { return Health; }
+
+	void GetItem(class AItemBase* const Item);
 
 protected:
 	virtual void BeginPlay() override;
@@ -48,6 +51,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	UBSPlayerAttackComponent* BSAttackComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	UBSInvenComponent* BSInvenComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Camera")
 	float SpringArmLength = 1000.0f;

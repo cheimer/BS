@@ -9,6 +9,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "BSComponent/BSHealthComponent.h"
 #include "BSComponent/BSPlayerAttackComponent.h"
+#include "BSComponent/BSInvenComponent.h"
 
 //EnhancedInput
 #include "EnhancedInputComponent.h"
@@ -43,6 +44,7 @@ ABSPlayerCharacter::ABSPlayerCharacter()
 
 	BSHealthComponent = CreateDefaultSubobject<UBSHealthComponent>("BSHealthComponent");
 	BSAttackComponent = CreateDefaultSubobject<UBSPlayerAttackComponent>("BSAttackComponent");
+	BSInvenComponent = CreateDefaultSubobject<UBSInvenComponent>("BSInvenComponent");
 
 }
 
@@ -115,4 +117,9 @@ void ABSPlayerCharacter::OnDeath(AActor* DeathActor)
 	GetMesh()->SetSimulatePhysics(true);
 
 }
- 
+
+void ABSPlayerCharacter::GetItem(AItemBase* const Item)
+{
+	BSInvenComponent->GetItem(Item);
+
+}

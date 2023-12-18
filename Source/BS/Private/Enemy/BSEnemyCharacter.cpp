@@ -84,6 +84,8 @@ void ABSEnemyCharacter::OnDeath(AActor* DeathActor)
 
 	PlayAnimMontage(DeathAnim);
 
+	ItemDropComponent->ItemDropStart(States.DropCoin, States.DropMaterial);
+
 	GetCharacterMovement()->DisableMovement();
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 

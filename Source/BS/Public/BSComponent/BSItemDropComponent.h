@@ -15,9 +15,19 @@ class BS_API UBSItemDropComponent : public UActorComponent
 public:	
 	UBSItemDropComponent();
 
-	int32 GetItemRand(int32 AverageNum);
+	void ItemDropStart(int32 DropCoin, int32 DropMaterial);
 
 protected:
 	virtual void BeginPlay() override;
+
+	int32 GetItemRand(int32 AverageNum);
+
+
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Item")
+	TSubclassOf<class AItemBase> CoinClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Item")
+	TSubclassOf<class AItemBase> MaterialClass;
 
 };

@@ -35,7 +35,8 @@ public class BS : ModuleRules
 			"BS/Public/AI/Task",
 			"BS/Public/AI/Service", 
 			"BS/Public/BSComponent", 
-			"BS/Public/Animation"
+			"BS/Public/Animation", 
+			"BS/Public/Item"
 		});
 
 		// Uncomment if you are using Slate UI

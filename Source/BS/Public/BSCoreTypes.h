@@ -4,7 +4,7 @@
 //DECLARE_LOG_CATEGORY_EXTERN(LogSetting, Log, All);
 //DEFINE_LOG_CATEGORY(LogSetting);
 
-//Attack
+// Attack
 
 UENUM(BlueprintType)
 enum class EAttackType : uint8
@@ -59,7 +59,7 @@ struct FAttackState
 
 };
 
-//Enemy
+// Enemy
 
 USTRUCT(BlueprintType)
 struct FEnemyState
@@ -76,10 +76,13 @@ struct FEnemyState
 	float DeathEndTime = 3.0f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "State", meta = (ToolTip = "Recommend X5"))
-	int32 DropMaterial = 10.0f;
+	int32 DefaultDropMaterial = 10;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "State", meta = (ToolTip = "Recommend X5"))
-	int32 DropCoin = 10.0f;
+	int32 DefaultDropCoin = 10;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "State")
+	float DropMultiplier = 1.0f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "State")
 	float Damage = 10.0f;
@@ -98,7 +101,7 @@ struct FEnemyState
 
 };
 
-//Animation
+// Animation
 
 class AnimUtils
 {
