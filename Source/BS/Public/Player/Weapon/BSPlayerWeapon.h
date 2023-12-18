@@ -21,7 +21,7 @@ class BS_API ABSPlayerWeapon : public AActor
 public:		
 	ABSPlayerWeapon();
 
-	void WeaponSetting(EAttackArr CurrentAttackArr, FAttackState CurrentAttackState);
+	void WeaponSetting(EAttackMaterial CurrentAttackMaterial, FAttackState CurrentAttackState);
 
 	EAttackType GetAttackType() { return AttackType; }
 
@@ -47,7 +47,7 @@ protected:
 	EAttackType AttackType;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Types")
-	TMap<EAttackArr, UNiagaraSystem*> AttackArr;
+	TMap<EAttackMaterial, UNiagaraSystem*> AttackMaterial;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
 	float WeaponLength = 1000.0f;

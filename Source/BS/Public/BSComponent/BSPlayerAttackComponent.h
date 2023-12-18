@@ -17,9 +17,13 @@ class BS_API UBSPlayerAttackComponent : public UActorComponent
 public:	
 	UBSPlayerAttackComponent();
 
-	EAttackArr CurrentAttackArr;
+	EAttackMaterial CurrentAttackMaterial;
 	float GetWeaponDamage(EAttackType AttackType);
 
+	void ChangeMaterialSequence();
+
+	void AttackTypeEnforce(EAttackType AttackType);
+	void AttackMaterialEnforce(EAttackMaterial AttackMaterial);
 protected:
 	virtual void BeginPlay() override;
 
@@ -30,7 +34,7 @@ protected:
 	TArray<FAttackState> WeaponData;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-	TMap<EAttackArr, int> AttackArrLevel;
+	TMap<EAttackMaterial, int> AttackMaterialLevel;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Debug")
 	bool IsDrawDebugSphere = false;
@@ -43,6 +47,6 @@ private:
 	void PlayerAttack(ABSPlayerWeapon* PlayerWeapon, FAttackState WeaponState);
 
 	void SetAttackTypesTimer();
-	void AttackArrSetting();
+	void AttackMaterialSetting();
 	int AttackTypeToIndex(EAttackType AttackType);
 };

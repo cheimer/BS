@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
+#include "BSCoreTypes.h"
 #include "BSPlayerCharacter.generated.h"
 
 
@@ -32,10 +33,15 @@ public:
 
 	void GetItem(class AItemBase* const Item);
 
+	void AttackTypeEnforce(EAttackType AttackType);
+	void AttackMaterialEnforce(EAttackMaterial AttackMaterial);
+
 protected:
 	virtual void BeginPlay() override;
 
 	void Move(const FInputActionValue& Value);
+
+	void ChangeMaterial(const FInputActionValue& Value);
 
 	UFUNCTION()
 	void OnDeath(AActor* DeathActor);
@@ -73,6 +79,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "EnhancedInput")
 	UInputAction* MoveAction;
 
+	UPROPERTY(EditDefaultsOnly, Category = "EnhancedInput")
+	UInputAction* ChangeMaterialAction;
 private:
 
 };

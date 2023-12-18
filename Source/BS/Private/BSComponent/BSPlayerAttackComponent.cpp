@@ -11,7 +11,7 @@ UBSPlayerAttackComponent::UBSPlayerAttackComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
 
-	AttackArrSetting();
+	AttackMaterialSetting();
 }
 
 void UBSPlayerAttackComponent::BeginPlay()
@@ -40,7 +40,7 @@ void UBSPlayerAttackComponent::PlayerAttack(ABSPlayerWeapon* PlayerWeapon, FAtta
 	if (SpawnedWeapon)
 	{
 		SpawnedWeapon->SetOwner(Player);
-		SpawnedWeapon->WeaponSetting(CurrentAttackArr, WeaponData[WeaponIndex]);
+		SpawnedWeapon->WeaponSetting(CurrentAttackMaterial, WeaponData[WeaponIndex]);
 		SpawnedWeapon->FinishSpawning(SpawnTransform);
 
 		if (IsDrawDebugSphere)
@@ -89,21 +89,48 @@ int UBSPlayerAttackComponent::AttackTypeToIndex(EAttackType AttackType)
 	return -1;
 }
 
-void UBSPlayerAttackComponent::AttackArrSetting()
+void UBSPlayerAttackComponent::AttackMaterialSetting()
 {
-	AttackArrLevel.Add(EAttackArr::Dark, 1);
-	AttackArrLevel.Add(EAttackArr::Shine, 1);
-	AttackArrLevel.Add(EAttackArr::Fire, 1);
-	AttackArrLevel.Add(EAttackArr::Ice, 1);
-	AttackArrLevel.Add(EAttackArr::Water, 1);
-	AttackArrLevel.Add(EAttackArr::Thunder, 1);
-	CurrentAttackArr = EAttackArr::Thunder;
+	AttackMaterialLevel.Add(EAttackMaterial::Dark, 1);
+	AttackMaterialLevel.Add(EAttackMaterial::Shine, 1);
+	AttackMaterialLevel.Add(EAttackMaterial::Fire, 1);
+	AttackMaterialLevel.Add(EAttackMaterial::Ice, 1);
+	AttackMaterialLevel.Add(EAttackMaterial::Water, 1);
+	AttackMaterialLevel.Add(EAttackMaterial::Thunder, 1);
+	CurrentAttackMaterial = EAttackMaterial::Thunder;
 }
 
 float UBSPlayerAttackComponent::GetWeaponDamage(EAttackType AttackType)
 {
 	int index = AttackTypeToIndex(AttackType);
+	if (index < 0) return -1;
 
-	//TEMP
-	return WeaponData[index].DamageDefault;
+	auto MaterialDamage = *AttackMaterialLevel.Find(CurrentAttackMaterial) * WeaponData[index].DamageDefault;
+
+	return WeaponData[index].DamageDefault * WeaponData[index].AttackLevel + MaterialDamage;
+}
+
+void UBSPlayerAttackComponent::ChangeMaterialSequence()
+{
+	int NextMaterialIndex = static_cast<int>(CurrentAttackMaterial) + 1;
+	if (NextMaterialIndex == AttackMaterialLevel.Num())
+	{
+		NextMaterialIndex = 0;
+	}
+
+	CurrentAttackMaterial = static_cast<EAttackMaterial>(NextMaterialIndex);
+
+}
+
+void UBSPlayerAttackComponent::AttackTypeEnforce(EAttackType AttackType)
+{
+	int TypeIndex = AttackTypeToIndex(AttackType);
+	WeaponData[TypeIndex].AttackLevel++;
+
+}
+
+void UBSPlayerAttackComponent::AttackMaterialEnforce(EAttackMaterial AttackMaterial)
+{
+	*AttackMaterialLevel.Find(AttackMaterial) += 1;
+
 }

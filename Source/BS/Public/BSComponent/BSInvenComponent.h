@@ -20,6 +20,8 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	void AutoLevelUp();
+
 private:
 	UPROPERTY(EditAnywhere, Category = "Item")
 	int32 Coin = 0;

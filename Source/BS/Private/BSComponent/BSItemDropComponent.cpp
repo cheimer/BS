@@ -23,10 +23,9 @@ void UBSItemDropComponent::ItemDropStart(int32 DropCoin, int32 DropMaterial)
 	int32 CoinNum = GetItemRand(DropCoin);
 	int32 MaterialNum = GetItemRand(DropMaterial);
 
-	if (!GetOwner() || !Cast<ABSEnemyCharacter>(GetOwner())) return;
+	if (!GetOwner()) return;
 
-	auto EnemyCharacter = Cast<ABSEnemyCharacter>(GetOwner());
-	FVector Location = EnemyCharacter->GetActorLocation();
+	FVector Location = GetOwner()->GetActorLocation();
 	Location.Z = 0.0f;
 
 	int32 RandNum = FMath::RandRange(1, 10);
@@ -35,7 +34,7 @@ void UBSItemDropComponent::ItemDropStart(int32 DropCoin, int32 DropMaterial)
 		auto SpawnCoin = GetWorld()->SpawnActor<AItemBase>(CoinClass, Location, FRotator::ZeroRotator);
 		if (SpawnCoin)
 		{
-			SpawnCoin->SetCoinAmount(GetItemRand(EnemyCharacter->States.DefaultDropCoin * EnemyCharacter->States.DropMultiplier));
+			SpawnCoin->SetCoinAmount(GetItemRand(DropCoin));
 		}
 	}
 	else if (6 <= RandNum && RandNum <= 10) // Material Drop
@@ -43,7 +42,7 @@ void UBSItemDropComponent::ItemDropStart(int32 DropCoin, int32 DropMaterial)
 		auto SpawnMaterial = GetWorld()->SpawnActor<AItemBase>(MaterialClass, Location, FRotator::ZeroRotator);
 		if (SpawnMaterial)
 		{
-			SpawnMaterial->SetMaterialAmount(GetItemRand(EnemyCharacter->States.DefaultDropMaterial * EnemyCharacter->States.DropMultiplier));
+			SpawnMaterial->SetMaterialAmount(GetItemRand(DropMaterial));
 		}
 	}
 

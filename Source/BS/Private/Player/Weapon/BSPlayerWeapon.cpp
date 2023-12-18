@@ -46,6 +46,7 @@ void ABSPlayerWeapon::OnWeaponHit(UPrimitiveComponent* OverlappedComponent, AAct
 		if (!Player || !Enemy) return;
 		
 		float Damage = Player->GetComponentByClass<UBSPlayerAttackComponent>()->GetWeaponDamage(AttackType);
+
 		Enemy->TakeDamage(Damage, FDamageEvent::FDamageEvent(), Player->GetController(), this);
 
 		if (AttackState.EnemyPass > 0)
@@ -60,12 +61,12 @@ void ABSPlayerWeapon::OnWeaponHit(UPrimitiveComponent* OverlappedComponent, AAct
 	}
 }
 
-void ABSPlayerWeapon::WeaponSetting(EAttackArr CurrentAttackArr, FAttackState CurrentAttackState)
+void ABSPlayerWeapon::WeaponSetting(EAttackMaterial CurrentAttackMaterial, FAttackState CurrentAttackState)
 {
-	if (!AttackArr.Find(CurrentAttackArr))
+	if (!AttackMaterial.Find(CurrentAttackMaterial))
 		return;
 
-	FXComponent = UNiagaraFunctionLibrary::SpawnSystemAttached(AttackArr[CurrentAttackArr], CollisionComponent, "",
+	FXComponent = UNiagaraFunctionLibrary::SpawnSystemAttached(AttackMaterial[CurrentAttackMaterial], CollisionComponent, "",
 		FVector::ZeroVector, FRotator::ZeroRotator, EAttachLocation::SnapToTarget, true);
 	
 	FXComponent->SetPaused(false);

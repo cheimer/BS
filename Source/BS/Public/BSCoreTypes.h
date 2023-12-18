@@ -15,7 +15,7 @@ enum class EAttackType : uint8
 };
 
 UENUM(BlueprintType)
-enum class EAttackArr : uint8
+enum class EAttackMaterial : uint8
 {
 	Thunder = 0,
 	Water,

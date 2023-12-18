@@ -36,7 +36,6 @@ void AItemBase::ItemAcquire(UPrimitiveComponent* OverlappedComponent, AActor* Ot
 	auto Player = Cast<ABSPlayerCharacter>(OtherActor);
 	if (!Player) return;
 
-	UE_LOG(LogTemp, Warning, TEXT("ITEM GET"));
 	Player->GetItem(this);
 
 }

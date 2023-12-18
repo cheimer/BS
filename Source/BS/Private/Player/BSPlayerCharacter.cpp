@@ -86,6 +86,7 @@ void ABSPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ABSPlayerCharacter::Move);
+		EnhancedInputComponent->BindAction(ChangeMaterialAction, ETriggerEvent::Triggered, this, &ABSPlayerCharacter::ChangeMaterial);
 	}
 
 }
@@ -108,6 +109,15 @@ void ABSPlayerCharacter::Move(const FInputActionValue& Value)
 
 }
 
+void ABSPlayerCharacter::ChangeMaterial(const FInputActionValue& Value)
+{
+	if (!GetController()) return;
+	if (!Value.Get<bool>()) return;
+
+	BSAttackComponent->ChangeMaterialSequence();
+
+}
+
 void ABSPlayerCharacter::OnDeath(AActor* DeathActor)
 {
 	if (!DeathActor->IsA(this->StaticClass())) return;
@@ -122,4 +132,14 @@ void ABSPlayerCharacter::GetItem(AItemBase* const Item)
 {
 	BSInvenComponent->GetItem(Item);
 
+}
+
+void ABSPlayerCharacter::AttackTypeEnforce(EAttackType AttackType)
+{
+	BSAttackComponent->AttackTypeEnforce(AttackType);
+}
+
+void ABSPlayerCharacter::AttackMaterialEnforce(EAttackMaterial AttackMaterial)
+{
+	BSAttackComponent->AttackMaterialEnforce(AttackMaterial);
 }
