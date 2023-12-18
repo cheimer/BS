@@ -49,11 +49,11 @@ void ABSPlayerWeapon::OnWeaponHit(UPrimitiveComponent* OverlappedComponent, AAct
 
 		Enemy->TakeDamage(Damage, FDamageEvent::FDamageEvent(), Player->GetController(), this);
 
-		if (AttackState.EnemyPass > 0)
+		if (AttackState.EnemyHitNum > 0)
 		{
-			AttackState.EnemyPass -= 1;
+			AttackState.EnemyHitNum -= 1;
 
-			if (AttackState.EnemyPass == 0)
+			if (AttackState.EnemyHitNum == 0)
 			{
 				Destroy();
 			}

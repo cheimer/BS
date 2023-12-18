@@ -36,6 +36,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	TMap<EAttackMaterial, int> AttackMaterialLevel;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+	bool bUseDataTableWeapon = false;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
+	class UDataTable* DTWeapon;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Debug")
 	bool IsDrawDebugSphere = false;
 
@@ -43,10 +49,14 @@ protected:
 	FColor DebugSphereColor = FColor::Black;
 
 private:
+	void SetWeaponDefault();
+
 	UFUNCTION()
 	void PlayerAttack(ABSPlayerWeapon* PlayerWeapon, FAttackState WeaponState);
 
 	void SetAttackTypesTimer();
 	void AttackMaterialSetting();
+
 	int AttackTypeToIndex(EAttackType AttackType);
+
 };
