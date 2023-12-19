@@ -24,12 +24,12 @@ public:
 
 	float GetHealth() { return States.Health; }
 
-	bool IsDead();
+	bool IsDead();	
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI")
 	UBehaviorTree* BehaviorTree;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "State")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
 	FEnemyState States;
 
 protected:

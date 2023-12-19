@@ -139,7 +139,7 @@ float ABSEnemyCharacter::GetDistancePlayer() const
 
 void ABSEnemyCharacter::OnAttack(AActor* Attacker)
 {
-	
+
 }
 
 void ABSEnemyCharacter::SetActorRotationPlayer()

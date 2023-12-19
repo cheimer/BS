@@ -20,6 +20,8 @@ public:
 
 	bool IsDead() { return FMath::IsNearlyZero(CurrentHealth); }
 
+	float GetHealthPercentage() { return CurrentHealth / MaxHealth; }
+
 protected:
 	virtual void BeginPlay() override;
 

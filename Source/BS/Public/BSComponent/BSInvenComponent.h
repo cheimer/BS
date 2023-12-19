@@ -17,6 +17,9 @@ public:
 
 	void GetItem(class AItemBase* const Item);
 
+	int32 GetCoin() { return Coin; }
+	int32 GetMaterial() { return Material; }
+
 protected:
 	virtual void BeginPlay() override;
 

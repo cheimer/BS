@@ -29,12 +29,19 @@ public:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	float GetHealth() { return Health; }
+	float GetHealth() { return MaxHealth; }
 
 	void GetItem(class AItemBase* const Item);
 
 	void AttackTypeEnforce(EAttackType AttackType);
 	void AttackMaterialEnforce(EAttackMaterial AttackMaterial);
+
+	UFUNCTION(BlueprintCallable)
+	int32 GetCoin();
+	UFUNCTION(BlueprintCallable)
+	int32 GetMaterial();
+	UFUNCTION(BlueprintCallable)
+	float GetHealthPercentage();
 
 protected:
 	virtual void BeginPlay() override;
@@ -71,10 +78,10 @@ protected:
 	float WalkSpeed = 600.0f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "State")
-	float Health = 100.0f;
+	float MaxHealth = 100.0f;
 
 	UPROPERTY(EditDefaultsOnly, Category = "EnhancedInput")
-	UInputMappingContext* DefaultMapping;
+	UInputMappingContext* PlayerInputMapping;
 
 	UPROPERTY(EditDefaultsOnly, Category = "EnhancedInput")
 	UInputAction* MoveAction;

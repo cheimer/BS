@@ -14,4 +14,9 @@ class BS_API UBSBaseWidget : public UUserWidget
 {
 	GENERATED_BODY()
 	
+
+public:
+	UFUNCTION(BlueprintImplementableEvent)
+	void BeginFunc();
+
 };

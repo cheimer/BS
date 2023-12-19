@@ -52,9 +52,18 @@ void ABSPlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (!DefaultMapping || !MoveAction)
+	if (!PlayerInputMapping || !MoveAction)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("DefaultMapping, MoveAction is NULL"));
+		UE_LOG(LogTemp, Warning, TEXT("PlayerInputMapping, MoveAction is NULL"));
+	}
+
+	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
+	{
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem =
+			ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+		{
+			Subsystem->AddMappingContext(PlayerInputMapping, 0);
+		}
 	}
 
 	BSHealthComponent->OnDeathSignature.AddUObject(this, &ABSPlayerCharacter::OnDeath);
@@ -65,23 +74,11 @@ void ABSPlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	
-
 }
 
 void ABSPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
-	{
-		if (UEnhancedInputLocalPlayerSubsystem* Subsystem =
-			ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
-		{
-			Subsystem->ClearAllMappings();
-			Subsystem->AddMappingContext(DefaultMapping, 0);
-		}
-	}
 
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
@@ -142,4 +139,19 @@ void ABSPlayerCharacter::AttackTypeEnforce(EAttackType AttackType)
 void ABSPlayerCharacter::AttackMaterialEnforce(EAttackMaterial AttackMaterial)
 {
 	BSAttackComponent->AttackMaterialEnforce(AttackMaterial);
+}
+
+int32 ABSPlayerCharacter::GetCoin()
+{
+	return BSInvenComponent->GetCoin();
+}
+
+int32 ABSPlayerCharacter::GetMaterial()
+{
+	return BSInvenComponent->GetMaterial();
+}
+
+float ABSPlayerCharacter::GetHealthPercentage()
+{
+	return BSHealthComponent->GetHealthPercentage();
 }
