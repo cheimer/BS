@@ -24,6 +24,9 @@ public:
 
 	void AttackTypeEnforce(EAttackType AttackType);
 	void AttackMaterialEnforce(EAttackMaterial AttackMaterial);
+	int GetAttackTypeLevel(EAttackType AttackType);
+	int GetAttackMaterialLevel(EAttackMaterial AttackMaterial);
+
 protected:
 	virtual void BeginPlay() override;
 

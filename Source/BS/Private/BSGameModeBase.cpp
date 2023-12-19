@@ -12,18 +12,3 @@ ABSGameModeBase::ABSGameModeBase()
 	PlayerControllerClass = ABSPlayerController::StaticClass();
 
 }
-
-AActor* ABSGameModeBase::GetBSPlayerCharacter()
-{
-	ABSPlayerCharacter* BSPlayer = Cast<ABSPlayerCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
-
-	if (BSPlayer)
-	{
-		return BSPlayer;
-	}
-	else
-	{
-		return nullptr;
-	}
-
-}

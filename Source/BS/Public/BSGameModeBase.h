@@ -15,6 +15,9 @@ class BS_API ABSGameModeBase : public AGameModeBase
 public:
 	ABSGameModeBase();
 	
-	AActor* GetBSPlayerCharacter();
+	int GetEnforceCost() { return EnforceCost; }
+
+private:
+	int EnforceCost = 1;
 
 };

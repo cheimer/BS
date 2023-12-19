@@ -96,17 +96,6 @@ int UBSPlayerAttackComponent::AttackTypeToIndex(EAttackType AttackType)
 	return -1;
 }
 
-void UBSPlayerAttackComponent::AttackMaterialSetting()
-{
-	AttackMaterialLevel.Add(EAttackMaterial::Dark, 1);
-	AttackMaterialLevel.Add(EAttackMaterial::Shine, 1);
-	AttackMaterialLevel.Add(EAttackMaterial::Fire, 1);
-	AttackMaterialLevel.Add(EAttackMaterial::Ice, 1);
-	AttackMaterialLevel.Add(EAttackMaterial::Water, 1);
-	AttackMaterialLevel.Add(EAttackMaterial::Thunder, 1);
-	CurrentAttackMaterial = EAttackMaterial::Thunder;
-}
-
 float UBSPlayerAttackComponent::GetWeaponDamage(EAttackType AttackType)
 {
 	int index = AttackTypeToIndex(AttackType);
@@ -139,7 +128,16 @@ void UBSPlayerAttackComponent::AttackTypeEnforce(EAttackType AttackType)
 void UBSPlayerAttackComponent::AttackMaterialEnforce(EAttackMaterial AttackMaterial)
 {
 	*AttackMaterialLevel.Find(AttackMaterial) += 1;
+}
 
+int UBSPlayerAttackComponent::GetAttackTypeLevel(EAttackType AttackType)
+{
+	return WeaponData[AttackTypeToIndex(AttackType)].AttackLevel;
+}
+
+int UBSPlayerAttackComponent::GetAttackMaterialLevel(EAttackMaterial AttackMaterial)
+{
+	return AttackMaterialLevel[AttackMaterial];
 }
 
 void UBSPlayerAttackComponent::SetWeaponDefault()
@@ -162,4 +160,15 @@ void UBSPlayerAttackComponent::SetWeaponDefault()
 		WeaponData[index].SpellSize = DTAttackState->SpellSize;
 	}
 
+}
+
+void UBSPlayerAttackComponent::AttackMaterialSetting()
+{
+	AttackMaterialLevel.Add(EAttackMaterial::Dark, 1);
+	AttackMaterialLevel.Add(EAttackMaterial::Shine, 1);
+	AttackMaterialLevel.Add(EAttackMaterial::Fire, 1);
+	AttackMaterialLevel.Add(EAttackMaterial::Ice, 1);
+	AttackMaterialLevel.Add(EAttackMaterial::Water, 1);
+	AttackMaterialLevel.Add(EAttackMaterial::Thunder, 1);
+	CurrentAttackMaterial = EAttackMaterial::Thunder;
 }

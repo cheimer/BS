@@ -22,6 +22,7 @@ void UBSItemDropComponent::ItemDropStart(int32 DropCoin, int32 DropMaterial)
 {
 	int32 CoinNum = GetItemRand(DropCoin);
 	int32 MaterialNum = GetItemRand(DropMaterial);
+	EAttackMaterial MaterialRand = static_cast<EAttackMaterial>(FMath::RandRange(0, 5));
 
 	if (!GetOwner()) return;
 
@@ -34,7 +35,7 @@ void UBSItemDropComponent::ItemDropStart(int32 DropCoin, int32 DropMaterial)
 		auto SpawnCoin = GetWorld()->SpawnActor<AItemBase>(CoinClass, Location, FRotator::ZeroRotator);
 		if (SpawnCoin)
 		{
-			SpawnCoin->SetCoinAmount(GetItemRand(DropCoin));
+			SpawnCoin->SetCoinAmount(CoinNum);
 		}
 	}
 	else if (6 <= RandNum && RandNum <= 10) // Material Drop
@@ -42,7 +43,7 @@ void UBSItemDropComponent::ItemDropStart(int32 DropCoin, int32 DropMaterial)
 		auto SpawnMaterial = GetWorld()->SpawnActor<AItemBase>(MaterialClass, Location, FRotator::ZeroRotator);
 		if (SpawnMaterial)
 		{
-			SpawnMaterial->SetMaterialAmount(GetItemRand(DropMaterial));
+			SpawnMaterial->SetMaterialAmount(MaterialRand, MaterialNum);
 		}
 	}
 

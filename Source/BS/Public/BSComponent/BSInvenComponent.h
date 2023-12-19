@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "BSCoreTypes.h"
 #include "BSInvenComponent.generated.h"
 
 
@@ -17,20 +18,27 @@ public:
 
 	void GetItem(class AItemBase* const Item);
 
-	int32 GetCoin() { return Coin; }
-	int32 GetMaterial() { return Material; }
+	int32 GetCoin() { return CoinNum; }
+	int32 GetMaterialTotal();
+	int GetAttackMaterialNum(EAttackMaterial AttackMaterial);
+
+	void AttackTypeEnforce(EAttackType AttackType);
+	void AttackMaterialEnforce(EAttackMaterial AttackMaterial);
+
+	bool CanAttackTypeEnforce();
+	bool CanAttackMaterialEnforce(EAttackMaterial AttackMaterial);
 
 protected:
 	virtual void BeginPlay() override;
 
-	void AutoLevelUp();
-
 private:
-	UPROPERTY(EditAnywhere, Category = "Item")
-	int32 Coin = 0;
+	void MaterialSetZero();
 
 	UPROPERTY(EditAnywhere, Category = "Item")
-	int32 Material = 0;
+	int32 CoinNum = 0;
 
-	
+	UPROPERTY(EditAnywhere, Category = "Item")
+	TMap<EAttackMaterial, int> MaterialNum;
+
+	int EnforceCost;
 };

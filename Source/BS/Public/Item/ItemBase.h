@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "BSCoreTypes.h"
 #include "ItemBase.generated.h"
 
 UCLASS()
@@ -16,8 +17,8 @@ public:
 
 	void SetCoinAmount(int32 SetAmount) { CoinAmount = SetAmount; }
 	int32 GetCoinAmount() { return CoinAmount; }
-	void SetMaterialAmount(int32 SetAmount) { MaterialAmount = SetAmount; }
-	int32 GetMaterialAmount() { return MaterialAmount; }
+	void SetMaterialAmount(EAttackMaterial SetMaterial, int32 SetAmount);
+	int32 GetMaterial(EAttackMaterial& OutMaterial);
 
 protected:
 	virtual void BeginPlay() override;
@@ -35,6 +36,7 @@ private:
 
 private:
 	int32 CoinAmount = 0;
+	EAttackMaterial MaterialType;
 	int32 MaterialAmount = 0;
 
 };

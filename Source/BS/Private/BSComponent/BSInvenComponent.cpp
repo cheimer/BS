@@ -4,6 +4,7 @@
 #include "BSComponent/BSInvenComponent.h"
 #include "Player/BSPlayerCharacter.h"
 #include "Item/ItemBase.h"
+#include "BSGameModeBase.h"
 
 UBSInvenComponent::UBSInvenComponent()
 {
@@ -15,38 +16,84 @@ void UBSInvenComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	
+	MaterialSetZero();
+
+	auto BSGameMode = Cast<ABSGameModeBase>(GetWorld()->GetAuthGameMode());
+	check(BSGameMode);
+
+	EnforceCost = BSGameMode->GetEnforceCost();
+
 }
 
-void UBSInvenComponent::AutoLevelUp()
+void UBSInvenComponent::MaterialSetZero()
 {
-	if (!GetOwner() || !Cast<ABSPlayerCharacter>(GetOwner())) return;
-	ABSPlayerCharacter* Player = Cast<ABSPlayerCharacter>(GetOwner());
-
-	if (Coin >= 10)
-	{
-		Player->AttackTypeEnforce(EAttackType::Arrow);
-
-		Coin -= 10;
-	}
-
-	if (Material >= 10)
-	{
-		Player->AttackMaterialEnforce(EAttackMaterial::Thunder);
-
-		Material -= 10;
-
-	}
-
+	MaterialNum.Add(EAttackMaterial::Dark, 0);
+	MaterialNum.Add(EAttackMaterial::Shine, 0);
+	MaterialNum.Add(EAttackMaterial::Fire, 0);
+	MaterialNum.Add(EAttackMaterial::Ice, 0);
+	MaterialNum.Add(EAttackMaterial::Water, 0);
+	MaterialNum.Add(EAttackMaterial::Thunder, 0);
 }
 
 void UBSInvenComponent::GetItem(AItemBase* const Item)
 {
-	Coin = Item->GetCoinAmount();
-	Material = Item->GetMaterialAmount();
+	CoinNum += Item->GetCoinAmount();
+
+	EAttackMaterial GetMaterialType;
+	int GetMaterialNum = Item->GetMaterial(GetMaterialType);
 
 	Item->Destroy();
 
-	UE_LOG(LogTemp, Warning, TEXT("Coin %d, Material %d"), Coin, Material);
-	AutoLevelUp();
+	*MaterialNum.Find(GetMaterialType) += GetMaterialNum;
+
+}
+
+int32 UBSInvenComponent::GetMaterialTotal()
+{
+	int32 total = 0;
+	for (auto Index : MaterialNum)
+	{
+		total += Index.Value;
+	}
+
+	return total;
+}
+
+int UBSInvenComponent::GetAttackMaterialNum(EAttackMaterial AttackMaterial)
+{
+	return MaterialNum[AttackMaterial];
+}
+
+void UBSInvenComponent::AttackTypeEnforce(EAttackType AttackType)
+{
+	CoinNum -= EnforceCost;
+}
+
+void UBSInvenComponent::AttackMaterialEnforce(EAttackMaterial AttackMaterial)
+{
+	*MaterialNum.Find(AttackMaterial) -= EnforceCost;
+}
+
+bool UBSInvenComponent::CanAttackTypeEnforce()
+{
+	if (CoinNum >= EnforceCost)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool UBSInvenComponent::CanAttackMaterialEnforce(EAttackMaterial AttackMaterial)
+{
+	if (MaterialNum[AttackMaterial] >= EnforceCost)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }

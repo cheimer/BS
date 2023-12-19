@@ -8,7 +8,6 @@
 #include "Animation/BSAttackAnimNotify.h"
 #include "BSComponent/BSHealthComponent.h"
 #include "BSComponent/BSItemDropComponent.h"
-#include "BSGameModeBase.h"
 #include "BSCoreTypes.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -121,13 +120,13 @@ void ABSEnemyCharacter::DeathAnimEnd()
 
 float ABSEnemyCharacter::GetDistancePlayer() const
 {
-	if (!GetWorld()) return 0.0f;
+	if (!GetWorld()) return -1;
 
-	const auto GameMode = Cast<ABSGameModeBase>(GetWorld()->GetAuthGameMode());
-	if (!GameMode) return 0.0f;
+	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+	if (!PlayerController) return -1;
 
-	const auto Player = GameMode->GetBSPlayerCharacter();
-	if (!Player) return 0.0f;
+	const auto Player = PlayerController->GetPawn();
+	if (!Player) return -1;
 
 	FVector PlayerLocation = Player->GetActorLocation();
 	FVector EnemyLocation = GetActorLocation();
@@ -145,11 +144,11 @@ void ABSEnemyCharacter::OnAttack(AActor* Attacker)
 void ABSEnemyCharacter::SetActorRotationPlayer()
 {
 	if (!GetWorld()) return;
+	
+	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+	if (!PlayerController) return;
 
-	const auto GameMode = Cast<ABSGameModeBase>(GetWorld()->GetAuthGameMode());
-	if (!GameMode) return;
-
-	const auto Player = GameMode->GetBSPlayerCharacter();
+	const auto Player = PlayerController->GetPawn();
 	if (!Player) return;
 
 	FVector PlayerLocation = Player->GetActorLocation();

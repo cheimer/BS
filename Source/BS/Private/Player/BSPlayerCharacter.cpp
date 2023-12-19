@@ -128,17 +128,40 @@ void ABSPlayerCharacter::OnDeath(AActor* DeathActor)
 void ABSPlayerCharacter::GetItem(AItemBase* const Item)
 {
 	BSInvenComponent->GetItem(Item);
-
 }
 
 void ABSPlayerCharacter::AttackTypeEnforce(EAttackType AttackType)
 {
-	BSAttackComponent->AttackTypeEnforce(AttackType);
+	if (BSInvenComponent->CanAttackTypeEnforce())
+	{
+		BSAttackComponent->AttackTypeEnforce(AttackType);
+		BSInvenComponent->AttackTypeEnforce(AttackType);
+	}
+
 }
 
 void ABSPlayerCharacter::AttackMaterialEnforce(EAttackMaterial AttackMaterial)
 {
-	BSAttackComponent->AttackMaterialEnforce(AttackMaterial);
+	if (BSInvenComponent->CanAttackMaterialEnforce(AttackMaterial))
+	{
+		BSAttackComponent->AttackMaterialEnforce(AttackMaterial);
+		BSInvenComponent->AttackMaterialEnforce(AttackMaterial);
+	}
+}
+
+int ABSPlayerCharacter::GetAttackTypeLevel(EAttackType AttackType)
+{
+	return BSAttackComponent->GetAttackTypeLevel(AttackType);
+}
+
+int ABSPlayerCharacter::GetAttackMaterialLevel(EAttackMaterial AttackMaterial)
+{
+	return BSAttackComponent->GetAttackMaterialLevel(AttackMaterial);
+}
+
+int ABSPlayerCharacter::GetAttackMaterialNum(EAttackMaterial AttackMaterial)
+{
+	return BSInvenComponent->GetAttackMaterialNum(AttackMaterial);
 }
 
 int32 ABSPlayerCharacter::GetCoin()
@@ -148,7 +171,7 @@ int32 ABSPlayerCharacter::GetCoin()
 
 int32 ABSPlayerCharacter::GetMaterial()
 {
-	return BSInvenComponent->GetMaterial();
+	return BSInvenComponent->GetMaterialTotal();
 }
 
 float ABSPlayerCharacter::GetHealthPercentage()

@@ -29,6 +29,7 @@ void AItemBase::BeginPlay()
 	Super::BeginPlay();
 
 	CollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &AItemBase::ItemAcquire);
+
 }
 
 void AItemBase::ItemAcquire(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -38,4 +39,16 @@ void AItemBase::ItemAcquire(UPrimitiveComponent* OverlappedComponent, AActor* Ot
 
 	Player->GetItem(this);
 
+}
+
+void AItemBase::SetMaterialAmount(EAttackMaterial SetMaterial, int32 SetAmount)
+{
+	MaterialType = SetMaterial;
+	MaterialAmount = SetAmount;
+}
+
+int32 AItemBase::GetMaterial(EAttackMaterial& OutMaterial)
+{
+	OutMaterial = MaterialType;
+	return MaterialAmount;
 }

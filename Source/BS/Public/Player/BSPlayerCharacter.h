@@ -33,8 +33,16 @@ public:
 
 	void GetItem(class AItemBase* const Item);
 
+	UFUNCTION(BlueprintCallable)
 	void AttackTypeEnforce(EAttackType AttackType);
+	UFUNCTION(BlueprintCallable)
 	void AttackMaterialEnforce(EAttackMaterial AttackMaterial);
+	UFUNCTION(BlueprintCallable)
+	int GetAttackTypeLevel(EAttackType AttackType);
+	UFUNCTION(BlueprintCallable)
+	int GetAttackMaterialLevel(EAttackMaterial AttackMaterial);
+	UFUNCTION(BlueprintCallable)
+	int GetAttackMaterialNum(EAttackMaterial AttackMaterial);
 
 	UFUNCTION(BlueprintCallable)
 	int32 GetCoin();
