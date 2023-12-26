@@ -4,40 +4,35 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/HUD.h"
-#include "BSGameHUD.generated.h"
+#include "BSMenuHUD.generated.h"
 
 UENUM(BlueprintType)
-enum class EGameWidgetMode : uint8
+enum class EMenuWidgetMode : uint8
 {
-	Battle = 0,
-	Inventory,
-	Pause
+	Main = 0,
+	Custom
 };
 
 UCLASS()
-class BS_API ABSGameHUD : public AHUD
+class BS_API ABSMenuHUD : public AHUD
 {
 	GENERATED_BODY()
 
 public:
 	UFUNCTION(BlueprintCallable)
-	void ChangeWidget(EGameWidgetMode NewWidget);
+	void ChangeWidget(EMenuWidgetMode NewWidget);
 
 protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
-	TSubclassOf<UUserWidget> BattleWidgetClass;
+	TSubclassOf<UUserWidget> MenuWidgetClass;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
-	TSubclassOf<UUserWidget> InventoryWidgetClass;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
-	TSubclassOf<UUserWidget> PauseWidgetClass;
+	TSubclassOf<UUserWidget> CustomWidgetClass;
 
 private:
-	TMap<EGameWidgetMode, class UBSBaseWidget*> Widgets;
+	TMap<EMenuWidgetMode, class UBSBaseWidget*> Widgets;
 
 	class UBSBaseWidget* CurrentWidget = nullptr;
-
 };

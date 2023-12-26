@@ -14,10 +14,30 @@ class BS_API ABSGameModeBase : public AGameModeBase
 	
 public:
 	ABSGameModeBase();
-	
+
+	virtual void Tick(float DeltaTime) override;
+
 	int GetEnforceCost() { return EnforceCost; }
 
-private:
+	UFUNCTION(BlueprintCallable)
+	float GetRemainTime();
+
+	void PlayerDeath();
+
+protected:
+	virtual void BeginPlay() override;
+
+	UPROPERTY(EditDefaultsOnly, Category = "DefaultSetting")
+	float TimeLimit = 30.0f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "DefaultSetting")
 	int EnforceCost = 1;
+
+private:
+	float GameStartTime = -1.0f;
+	float RemainTime = -1.0f;
+	void TimeOver();
+
+	// 사망시 호출, 적 스폰 비율 -> 시간 당 소환(0.5 - 2초마다 1번 스폰)
 
 };

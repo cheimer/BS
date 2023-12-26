@@ -1,16 +1,15 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "UI/BSGameHUD.h"
+#include "UI/BSMenuHUD.h"
 #include "UI/BSBaseWidget.h"
 
-void ABSGameHUD::BeginPlay()
+void ABSMenuHUD::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Widgets.Add(EGameWidgetMode::Battle, CreateWidget<UBSBaseWidget>(GetWorld(), BattleWidgetClass));
-	Widgets.Add(EGameWidgetMode::Inventory, CreateWidget<UBSBaseWidget>(GetWorld(), InventoryWidgetClass));
-	Widgets.Add(EGameWidgetMode::Pause, CreateWidget<UBSBaseWidget>(GetWorld(), PauseWidgetClass));
+	Widgets.Add(EMenuWidgetMode::Main, CreateWidget<UBSBaseWidget>(GetWorld(), MenuWidgetClass));
+	Widgets.Add(EMenuWidgetMode::Custom, CreateWidget<UBSBaseWidget>(GetWorld(), CustomWidgetClass));
 
 	for (auto WidgetPair : Widgets)
 	{
@@ -21,19 +20,15 @@ void ABSGameHUD::BeginPlay()
 		WidgetIndex->SetVisibility(ESlateVisibility::Hidden);
 	}
 
-	CurrentWidget = Widgets[EGameWidgetMode::Battle];
+	CurrentWidget = Widgets[EMenuWidgetMode::Main];
 	CurrentWidget->SetVisibility(ESlateVisibility::Visible);
-
 }
 
-void ABSGameHUD::ChangeWidget(EGameWidgetMode NewWidget)
+void ABSMenuHUD::ChangeWidget(EMenuWidgetMode NewWidget)
 {
 	if (!Widgets.Contains(NewWidget)) return;
+	if (Widgets[NewWidget] == CurrentWidget) return;
 
-	if (Widgets[NewWidget] == CurrentWidget && NewWidget != EGameWidgetMode::Battle)
-	{
-		ChangeWidget(EGameWidgetMode::Battle);
-	}
 	else if (Widgets[NewWidget] != CurrentWidget)
 	{
 		CurrentWidget->SetVisibility(ESlateVisibility::Hidden);
@@ -42,5 +37,6 @@ void ABSGameHUD::ChangeWidget(EGameWidgetMode NewWidget)
 
 		CurrentWidget->BeginFunc();
 	}
+
 
 }

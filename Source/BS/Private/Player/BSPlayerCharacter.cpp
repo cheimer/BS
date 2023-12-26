@@ -10,6 +10,7 @@
 #include "BSComponent/BSHealthComponent.h"
 #include "BSComponent/BSPlayerAttackComponent.h"
 #include "BSComponent/BSInvenComponent.h"
+#include "BSGameModeBase.h"
 
 //EnhancedInput
 #include "EnhancedInputComponent.h"
@@ -122,6 +123,11 @@ void ABSPlayerCharacter::OnDeath(AActor* DeathActor)
 	GetCharacterMovement()->DisableMovement();
 
 	GetMesh()->SetSimulatePhysics(true);
+
+	auto GameMode = Cast<ABSGameModeBase>(GetWorld()->GetAuthGameMode());
+	if (!GameMode) return;
+
+	GameMode->PlayerDeath();
 
 }
 

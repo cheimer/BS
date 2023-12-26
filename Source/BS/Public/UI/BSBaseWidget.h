@@ -19,4 +19,5 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void BeginFunc();
 
+
 };

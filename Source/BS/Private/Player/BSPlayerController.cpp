@@ -17,6 +17,8 @@ void ABSPlayerController::BeginPlay()
 	BSHUD = Cast<ABSGameHUD>(GetHUD());
 	check(BSHUD);
 
+	SetInputMode(FInputModeGameOnly());
+
 	if (UEnhancedInputLocalPlayerSubsystem* Subsystem =
 		ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
 	{
@@ -42,7 +44,7 @@ void ABSPlayerController::InputInventory(const FInputActionValue& Value)
 {
 	if (!Value.Get<bool>()) return;
 
-	BSHUD->ChangeWidget(EWidgetMode::Inventory);
+	BSHUD->ChangeWidget(EGameWidgetMode::Inventory);
 
 }
 
@@ -50,6 +52,6 @@ void ABSPlayerController::InputPause(const FInputActionValue& Value)
 {
 	if (!Value.Get<bool>()) return;
 
-	BSHUD->ChangeWidget(EWidgetMode::Pause);
+	BSHUD->ChangeWidget(EGameWidgetMode::Pause);
 
 }
