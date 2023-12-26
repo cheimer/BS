@@ -26,6 +26,17 @@ enum class EAttackMaterial : uint8
 	Dark
 };
 
+UENUM(BlueprintType)
+enum class EEnemyList : uint8
+{
+	Ghoul = 0,
+	Goblin,
+	Rich,
+	SkelBow,
+	SkelSword,
+	Zombie
+};
+
 USTRUCT(BlueprintType)
 struct FAttackState : public FTableRowBase
 {

@@ -21,6 +21,7 @@ ABSEnemyCharacter::ABSEnemyCharacter()
 	PrimaryActorTick.bCanEverTick = false;
 
 	AIControllerClass = ABSEnemyAIController::StaticClass();
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
 	bUseControllerRotationYaw = false;
 

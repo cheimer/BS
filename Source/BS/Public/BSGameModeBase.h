@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "BSCoreTypes.h"
 #include "BSGameModeBase.generated.h"
 
 
@@ -17,7 +18,7 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-	int GetEnforceCost() { return EnforceCost; }
+	int GetEnforceCost() { return EnforceCost; }	
 
 	UFUNCTION(BlueprintCallable)
 	float GetRemainTime();
@@ -33,10 +34,19 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "DefaultSetting")
 	int EnforceCost = 1;
 
+	UPROPERTY(EditDefaultsOnly, Category = "DefaultSetting")
+	TMap<EEnemyList, TSubclassOf<class ABSEnemyCharacter>> EnemyListClass;
+
+	UFUNCTION()
+	void SpawnEnemyTimer();
+
 private:
+	void TimeOver();
+
+	FVector CalcSpawnLocation();
+
 	float GameStartTime = -1.0f;
 	float RemainTime = -1.0f;
-	void TimeOver();
 
 	// 사망시 호출, 적 스폰 비율 -> 시간 당 소환(0.5 - 2초마다 1번 스폰)
 
