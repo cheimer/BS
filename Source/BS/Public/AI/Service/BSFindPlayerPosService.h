@@ -26,4 +26,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
 	FBlackboardKeySelector PlayerVecKey;
 
+private:
+	class ABSEnemyCharacter* GetServicedEnemy(UBehaviorTreeComponent& OwnerComp);
+
 };

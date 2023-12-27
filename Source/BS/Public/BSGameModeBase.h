@@ -45,7 +45,6 @@ protected:
 
 private:
 	void TimeOver();
-
 	FVector CalcSpawnLocation();
 
 	float GameStartTime = -1.0f;

@@ -20,12 +20,11 @@ Lich 공격 모션 2 추가 땅에서 지점 공격
 
 */
 
-// 시간, 플레이어 사망
-// 승/패 설정           GameState 추가
+// GameState 추가
 /* ERROR
 
 Anim - 연결이 부드럽지 않음. 이동 -> 공격 간의 끊김.
 		사망 모션 어색함. 수정 방법 생각해보기
 
-LifeTime - BSWeapon_에 나눠져있음, 중복코드 -> 하나로 합칠방법
+LifeTime - BSWeapon_에 나눠져있음 -> 하나로 합칠방법
 */

@@ -96,27 +96,19 @@ void ABSEnemyCharacter::OnDeath(AActor* DeathActor)
 	GetCharacterMovement()->DisableMovement();
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-	SetLifeSpan(3.0f);
-
 	const auto EnemyController = Cast<AAIController>(GetController());
 	if (EnemyController && EnemyController->BrainComponent)
 	{
 		EnemyController->BrainComponent->Cleanup();
 	}
 
-	FTimerHandle TimerHandler;
-	GetWorld()->GetTimerManager().SetTimer(TimerHandler, this, &ABSEnemyCharacter::DeathAnimEnd, DeathAnim->GetPlayLength() * 0.8f, false);
+	SetLifeSpan(DeathAnim->GetPlayLength() * 0.8f);
 
 }
 
 bool ABSEnemyCharacter::IsDead()
 {
 	return HealthComponent->IsDead();
-}
-
-void ABSEnemyCharacter::DeathAnimEnd()
-{
-	GetMesh()->GetAnimInstance()->Montage_SetPlayRate(DeathAnim, 0.0f);
 }
 
 float ABSEnemyCharacter::GetDistancePlayer() const
@@ -153,6 +145,7 @@ void ABSEnemyCharacter::SetActorRotationPlayer()
 	if (!Player) return;
 
 	FVector PlayerLocation = Player->GetActorLocation();
+	PlayerLocation.Z = GetActorLocation().Z;
 	FRotator NewRotation = (PlayerLocation - GetActorLocation()).Rotation();
 	SetActorRotation(NewRotation);
 }

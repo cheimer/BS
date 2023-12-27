@@ -17,7 +17,5 @@ class BS_API UBSAIPerceptionComponent : public UAIPerceptionComponent
 public:
 	UBSAIPerceptionComponent();
 
-	AActor* GetPlayerActor() const;
-
 
 };

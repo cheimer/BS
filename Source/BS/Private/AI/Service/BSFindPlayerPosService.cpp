@@ -3,7 +3,7 @@
 
 #include "AI/Service/BSFindPlayerPosService.h"
 #include "Enemy/BSEnemyAIController.h"
-#include "BSComponent/BSAIPerceptionComponent.h"
+#include "Enemy/BSEnemyCharacter.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
 UBSFindPlayerPosService::UBSFindPlayerPosService()
@@ -18,15 +18,27 @@ void UBSFindPlayerPosService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8*
 	const auto Blackboard = OwnerComp.GetBlackboardComponent();
 	if (!Blackboard) return;
 
+	ABSEnemyCharacter* Enemy = GetServicedEnemy(OwnerComp);
+
+	if (!GetWorld()->GetFirstPlayerController()) return;
+	const auto Player = GetWorld()->GetFirstPlayerController()->GetPawn();
+
+	if (!Player || !Enemy) return;
+
+	if (FVector::Dist(Player->GetActorLocation(), Enemy->GetActorLocation()) > Enemy->States.SearchRange) return;
+
+	Blackboard->SetValueAsObject(PlayerActorKey.SelectedKeyName, Player);
+	Blackboard->SetValueAsVector(PlayerVecKey.SelectedKeyName, Player->GetActorLocation());
+
+}
+
+ABSEnemyCharacter* UBSFindPlayerPosService::GetServicedEnemy(UBehaviorTreeComponent& OwnerComp)
+{
 	const auto Controller = OwnerComp.GetAIOwner();
-	if (!Controller) return;
+	if (!Controller) return nullptr;
 
-	const auto PerceptionComp = Controller->FindComponentByClass<UBSAIPerceptionComponent>();
-	if (!PerceptionComp) return;
+	const auto Enemy = Cast<ABSEnemyCharacter>(Controller->GetPawn());
+	if (!Enemy) return nullptr;
 
-	Blackboard->SetValueAsObject(PlayerActorKey.SelectedKeyName, PerceptionComp->GetPlayerActor());
-
-	if (!PerceptionComp->GetPlayerActor()) return; // nullptr일 경우 위는 nullptr 입력, 아래는 입력X
-	Blackboard->SetValueAsVector(PlayerVecKey.SelectedKeyName, PerceptionComp->GetPlayerActor()->GetActorLocation());
-
+	return Enemy;
 }

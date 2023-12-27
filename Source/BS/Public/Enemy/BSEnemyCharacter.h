@@ -68,6 +68,5 @@ protected:
 
 private:
 	void SetActorRotationPlayer();
-	void DeathAnimEnd();
 
 };

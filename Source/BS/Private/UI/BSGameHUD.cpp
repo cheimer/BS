@@ -31,11 +31,9 @@ void ABSGameHUD::ChangeWidget(EGameWidgetMode NewWidget)
 {
 	if (!Widgets.Contains(NewWidget)) return;
 
-	if (Widgets[NewWidget] == CurrentWidget && NewWidget != EGameWidgetMode::Battle)
-	{
-		ChangeWidget(EGameWidgetMode::Battle);
-	}
-	else if (Widgets[NewWidget] != CurrentWidget)
+	if (Widgets[NewWidget] == CurrentWidget) return;
+
+	if (Widgets[NewWidget] != CurrentWidget)
 	{
 		CurrentWidget->SetVisibility(ESlateVisibility::Hidden);
 		CurrentWidget = Widgets[NewWidget];
