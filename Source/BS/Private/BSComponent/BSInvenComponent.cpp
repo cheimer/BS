@@ -97,3 +97,25 @@ bool UBSInvenComponent::CanAttackMaterialEnforce(EAttackMaterial AttackMaterial)
 		return false;
 	}
 }
+
+void UBSInvenComponent::RerollMaterial()
+{
+	int32 Total = GetMaterialTotal() * RerollRate;
+
+	TArray<int32> MaterialDistribute;
+
+	for (int i = 0; i < MaterialNum.Num() - 1; i++)
+	{
+		MaterialDistribute.Add(FMath::RandRange(0, Total));
+	}
+	MaterialDistribute.Add(0);
+	MaterialDistribute.Add(Total);
+	MaterialDistribute.Sort();
+
+	for (int i = 1; i < MaterialDistribute.Num(); i++)
+	{
+		int32 NewMaterialNum = MaterialDistribute[i] - MaterialDistribute[i - 1];
+		*MaterialNum.Find(static_cast<EAttackMaterial>(i - 1)) = NewMaterialNum;
+	}
+
+}

@@ -51,6 +51,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	float GetHealthPercentage();
 
+	UFUNCTION(BlueprintCallable)
+	void RerollMaterial();
+
 protected:
 	virtual void BeginPlay() override;
 

@@ -184,3 +184,8 @@ float ABSPlayerCharacter::GetHealthPercentage()
 {
 	return BSHealthComponent->GetHealthPercentage();
 }
+
+void ABSPlayerCharacter::RerollMaterial()
+{
+	BSInvenComponent->RerollMaterial();
+}

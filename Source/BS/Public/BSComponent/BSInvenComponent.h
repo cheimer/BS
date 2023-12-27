@@ -28,8 +28,13 @@ public:
 	bool CanAttackTypeEnforce();
 	bool CanAttackMaterialEnforce(EAttackMaterial AttackMaterial);
 
+	void RerollMaterial();
+
 protected:
 	virtual void BeginPlay() override;
+
+	UPROPERTY(EditAnywhere, Category = "Reroll", meta = (ClampMin = 0, ClampMax = 1.0))
+	float RerollRate = 0.5f;
 
 private:
 	void MaterialSetZero();
