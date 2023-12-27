@@ -11,6 +11,7 @@ void ABSGameHUD::BeginPlay()
 	Widgets.Add(EGameWidgetMode::Battle, CreateWidget<UBSBaseWidget>(GetWorld(), BattleWidgetClass));
 	Widgets.Add(EGameWidgetMode::Inventory, CreateWidget<UBSBaseWidget>(GetWorld(), InventoryWidgetClass));
 	Widgets.Add(EGameWidgetMode::Pause, CreateWidget<UBSBaseWidget>(GetWorld(), PauseWidgetClass));
+	Widgets.Add(EGameWidgetMode::GameEnd, CreateWidget<UBSBaseWidget>(GetWorld(), GameEndWidgetClass));
 
 	for (auto WidgetPair : Widgets)
 	{

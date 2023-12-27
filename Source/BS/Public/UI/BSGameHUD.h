@@ -11,7 +11,8 @@ enum class EGameWidgetMode : uint8
 {
 	Battle = 0,
 	Inventory,
-	Pause
+	Pause, 
+	GameEnd
 };
 
 UCLASS()
@@ -34,6 +35,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
 	TSubclassOf<UUserWidget> PauseWidgetClass;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
+	TSubclassOf<UUserWidget> GameEndWidgetClass;
 
 private:
 	TMap<EGameWidgetMode, class UBSBaseWidget*> Widgets;

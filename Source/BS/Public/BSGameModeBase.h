@@ -28,6 +28,9 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	UFUNCTION()
+	void SpawnEnemyTimer();
+
 	UPROPERTY(EditDefaultsOnly, Category = "DefaultSetting")
 	float TimeLimit = 30.0f;
 
@@ -37,8 +40,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "DefaultSetting")
 	TMap<EEnemyList, TSubclassOf<class ABSEnemyCharacter>> EnemyListClass;
 
-	UFUNCTION()
-	void SpawnEnemyTimer();
+	UPROPERTY(BlueprintReadOnly)
+	bool isClear = false;
 
 private:
 	void TimeOver();
@@ -47,7 +50,5 @@ private:
 
 	float GameStartTime = -1.0f;
 	float RemainTime = -1.0f;
-
-	// 사망시 호출, 적 스폰 비율 -> 시간 당 소환(0.5 - 2초마다 1번 스폰)
 
 };

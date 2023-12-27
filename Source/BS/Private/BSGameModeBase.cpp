@@ -24,6 +24,8 @@ void ABSGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
 
+	isClear = false;
+
 	GameStartTime = GetWorld()->GetTimeSeconds();
 
 	FTimerHandle Timer;
@@ -53,8 +55,8 @@ void ABSGameModeBase::SpawnEnemyTimer()
 		for (int SpawnIndex = 0; SpawnIndex < Enemy.Value; SpawnIndex++)
 		{
 			SpawnLocation = CalcSpawnLocation();
-			auto SpawnedEnemy = GetWorld()->SpawnActor<ABSEnemyCharacter>(EnemyListClass[Enemy.Key], SpawnLocation, FRotator::ZeroRotator);
-			
+			FRotator SpawnRotator(0.0f, FMath::RandRange(0.0f, 360.0f), 0.0f);
+			auto SpawnedEnemy = GetWorld()->SpawnActor<ABSEnemyCharacter>(EnemyListClass[Enemy.Key], SpawnLocation, SpawnRotator);
 		}
 	}
 
@@ -78,9 +80,14 @@ FVector ABSGameModeBase::CalcSpawnLocation()
 
 void ABSGameModeBase::TimeOver()
 {
-	//GetWorld()->GamePause
+	const auto Controller = GetWorld()->GetFirstPlayerController();
+	if (!Controller) return;
 
-	UE_LOG(LogTemp, Warning, TEXT("Time Over TEMP"));
+	const auto GameHUD = Cast<ABSGameHUD>(Controller->GetHUD());
+	if (!GameHUD) return;
+
+	isClear = true;
+	GameHUD->ChangeWidget(EGameWidgetMode::GameEnd);
 
 }
 
@@ -91,5 +98,12 @@ float ABSGameModeBase::GetRemainTime()
 
 void ABSGameModeBase::PlayerDeath()
 {
-	UE_LOG(LogTemp, Warning, TEXT("PlayerDeath"));
+	const auto Controller = GetWorld()->GetFirstPlayerController();
+	if (!Controller) return;
+
+	const auto GameHUD = Cast<ABSGameHUD>(Controller->GetHUD());
+	if (!GameHUD) return;
+
+	isClear = false;
+	GameHUD->ChangeWidget(EGameWidgetMode::GameEnd);
 }
