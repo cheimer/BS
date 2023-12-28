@@ -40,6 +40,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "DefaultSetting")
 	TMap<EEnemyList, TSubclassOf<class ABSEnemyCharacter>> EnemyListClass;
 
+	UPROPERTY(EditDefaultsOnly, Category = "DefaultSetting")
+	FBox2D MapSize;
+
 	UPROPERTY(BlueprintReadOnly)
 	bool isClear = false;
 

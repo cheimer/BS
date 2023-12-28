@@ -9,7 +9,6 @@
 ABSWeaponArrow::ABSWeaponArrow()
 {
 	AttackType = EAttackType::Arrow;
-	AttackState.EnemyHitNum = 1;
 }
 
 void ABSWeaponArrow::SetDefaultOption()
@@ -17,6 +16,8 @@ void ABSWeaponArrow::SetDefaultOption()
 	MovementComponent->InitialSpeed = ArrowSpeed;
 	
 	SetLifeSpan(LifeTime);
+
+	SetArrowLevelAdd();
 
 	auto TargetEnemy = FindClosestEnemy();
 
@@ -28,4 +29,17 @@ void ABSWeaponArrow::SetDefaultOption()
 		SetActorRotation(Direction.ToOrientationQuat());
 
 	}
+}
+
+void ABSWeaponArrow::SetArrowLevelAdd()
+{
+	if (AttackState.EnemyHitNum == -1)
+	{
+		return;
+	}
+	else
+	{
+		AttackState.EnemyHitNum += AttackState.AttackLevel / HitNumAddLevel;
+	}
+
 }

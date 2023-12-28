@@ -26,4 +26,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Arrow")
 	float LifeTime = 5.0f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Arrow", meta = (ClampMin = 1))
+	int32 HitNumAddLevel = 5;
+
+private:
+	void SetArrowLevelAdd();
+
 };

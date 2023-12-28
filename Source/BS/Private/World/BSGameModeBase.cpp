@@ -70,12 +70,25 @@ FVector ABSGameModeBase::CalcSpawnLocation()
 	float MaxSpawnRadius = 2000.0f;
 	float MinSpawnRadius = 500.0f;
 	FVector2D SpawnLocation2D = FMath::RandPointInCircle(MaxSpawnRadius);
-	while (SpawnLocation2D.Size() < MinSpawnRadius)
+
+	while (true)
 	{
+		if (SpawnLocation2D.Size() > MinSpawnRadius)
+		{
+			SpawnLocation2D.X += PlayerLocation.X;
+			SpawnLocation2D.Y += PlayerLocation.Y;
+			if (MapSize.IsInsideOrOn(SpawnLocation2D))
+			{
+				break;
+			}
+		}
 		SpawnLocation2D = FMath::RandPointInCircle(MaxSpawnRadius);
 	}
 
-	return UKismetMathLibrary::Conv_Vector2DToVector(SpawnLocation2D) + PlayerLocation;
+	FVector SpawnLocation = UKismetMathLibrary::Conv_Vector2DToVector(SpawnLocation2D);
+	SpawnLocation.Z = PlayerLocation.Z;
+
+	return SpawnLocation;
 }
 
 void ABSGameModeBase::TimeOver()

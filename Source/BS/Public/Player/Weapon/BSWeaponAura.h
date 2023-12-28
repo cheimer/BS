@@ -20,7 +20,10 @@ public:
 protected:
 	void SetDefaultOption() override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Arrow")
-	float LifeTime = 1.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Aura", meta = (ClampMin = 1))
+	int32 SizeAddLevel = 5;
+
+private:
+	void SetAuraLevelAdd();
 
 };

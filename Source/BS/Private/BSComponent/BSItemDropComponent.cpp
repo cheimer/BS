@@ -27,23 +27,32 @@ void UBSItemDropComponent::ItemDropStart(int32 DropCoin, int32 DropMaterial)
 	if (!GetOwner()) return;
 
 	FVector Location = GetOwner()->GetActorLocation();
-	Location.Z = 0.0f;
+
+	if (const auto EnemyMesh = GetOwner()->GetComponentByClass<USkeletalMeshComponent>())
+	{
+		FVector MeshLocation = EnemyMesh->GetRelativeLocation();
+		Location.Z += MeshLocation.Z;
+	}
+	FTransform Transform;
+	Transform.SetLocation(Location);
 
 	int32 RandNum = FMath::RandRange(1, 10);
 	if (1 <= RandNum && RandNum <= 5) // Coin Drop
 	{
-		auto SpawnCoin = GetWorld()->SpawnActor<AItemBase>(CoinClass, Location, FRotator::ZeroRotator);
+		auto SpawnCoin = GetWorld()->SpawnActorDeferred<AItemBase>(CoinClass, Transform);
 		if (SpawnCoin)
 		{
 			SpawnCoin->SetCoinAmount(CoinNum);
+			SpawnCoin->FinishSpawning(Transform);
 		}
 	}
 	else if (6 <= RandNum && RandNum <= 10) // Material Drop
 	{
-		auto SpawnMaterial = GetWorld()->SpawnActor<AItemBase>(MaterialClass, Location, FRotator::ZeroRotator);
+		auto SpawnMaterial = GetWorld()->SpawnActorDeferred<AItemBase>(MaterialClass, Transform);
 		if (SpawnMaterial)
 		{
 			SpawnMaterial->SetMaterialAmount(MaterialRand, MaterialNum);
+			SpawnMaterial->FinishSpawning(Transform);
 		}
 	}
 

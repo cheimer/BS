@@ -25,9 +25,32 @@ void ABSWeaponSpell::SetDefaultOption()
 		SetLifeSpan(0.2f);
 	}
 
-	CollisionComponent->SetSphereRadius(AttackState.AuraSize);
+	SetSpellLevelAdd();
+
+	CollisionComponent->SetSphereRadius(AttackState.SpellSize);
 
 	float SizeTimes = AttackState.SpellSize / AttackState.SpellDefaultSize;
 	FXComponent->SetWorldScale3D(FVector(SizeTimes, SizeTimes, 1.0f));
 
+}
+
+void ABSWeaponSpell::SetSpellLevelAdd()
+{
+	if (AttackState.EnemyHitNum == -1)
+	{
+		return;
+	}
+	else
+	{
+		AttackState.EnemyHitNum += AttackState.AttackLevel / HitNumAddLevel;
+	}
+	
+	if (AttackState.SpellSize / AttackState.SpellDefaultSize >= 3.0f)
+	{
+		return;
+	}
+	else
+	{
+		AttackState.SpellSize = AttackState.SpellSize * (1.0f + 0.1f * AttackState.AttackLevel / SizeAddLevel);
+	}
 }

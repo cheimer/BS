@@ -14,7 +14,9 @@ ABSWeaponAura::ABSWeaponAura()
 
 void ABSWeaponAura::SetDefaultOption()
 {
-	SetLifeSpan(LifeTime);
+	SetLifeSpan(AttackState.AttackDelay);
+
+	SetAuraLevelAdd();
 
 	ACharacter* Player = Cast<ACharacter>(GetOwner());
 	if (Player && Player->GetMesh())
@@ -26,4 +28,16 @@ void ABSWeaponAura::SetDefaultOption()
 
 	float SizeTimes = AttackState.AuraSize / AttackState.AuraDefaultSize;
 	FXComponent->SetWorldScale3D(FVector(SizeTimes, SizeTimes, 1.0f));
+}
+
+void ABSWeaponAura::SetAuraLevelAdd()
+{
+	if (AttackState.AuraSize / AttackState.AuraDefaultSize >= 3.0f)
+	{
+		return;
+	}
+	else
+	{
+		AttackState.AuraSize = AttackState.AuraSize * (1.0f + 0.1f * AttackState.AttackLevel / SizeAddLevel);
+	}
 }
