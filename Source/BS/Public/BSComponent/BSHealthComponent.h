@@ -19,8 +19,9 @@ public:
 	FOnDeathSignature OnDeathSignature;
 
 	bool IsDead() { return FMath::IsNearlyZero(CurrentHealth); }
-
+	bool IsFullHealth() { return FMath::IsNearlyEqual(CurrentHealth, MaxHealth); }
 	float GetHealthPercentage() { return CurrentHealth / MaxHealth; }
+	void SetHealthFull();
 
 protected:
 	virtual void BeginPlay() override;

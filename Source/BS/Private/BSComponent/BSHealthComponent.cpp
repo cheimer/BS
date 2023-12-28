@@ -58,3 +58,8 @@ void UBSHealthComponent::SetHealth(float NewHealth)
 {
 	CurrentHealth = FMath::Clamp(NewHealth, 0.0f, MaxHealth);
 }
+
+void UBSHealthComponent::SetHealthFull()
+{
+	SetHealth(MaxHealth);
+}

@@ -18,12 +18,12 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-	int GetEnforceCost() { return EnforceCost; }	
-
 	UFUNCTION(BlueprintCallable)
 	float GetRemainTime();
 
 	void PlayerDeath();
+
+	EAttackMaterial GetMapMaterial() { return MapMaterial; }
 
 protected:
 	virtual void BeginPlay() override;
@@ -33,9 +33,6 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "DefaultSetting")
 	float TimeLimit = 30.0f;
-
-	UPROPERTY(EditDefaultsOnly, Category = "DefaultSetting")
-	int EnforceCost = 1;
 
 	UPROPERTY(EditDefaultsOnly, Category = "DefaultSetting")
 	TMap<EEnemyList, TSubclassOf<class ABSEnemyCharacter>> EnemyListClass;
@@ -49,8 +46,11 @@ protected:
 private:
 	void TimeOver();
 	FVector CalcSpawnLocation();
+	void SetMapMaterialRand();
 
 	float GameStartTime = -1.0f;
 	float RemainTime = -1.0f;
+
+	EAttackMaterial MapMaterial;
 
 };

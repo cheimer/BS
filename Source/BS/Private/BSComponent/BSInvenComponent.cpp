@@ -21,8 +21,6 @@ void UBSInvenComponent::BeginPlay()
 	auto BSGameMode = Cast<ABSGameModeBase>(GetWorld()->GetAuthGameMode());
 	check(BSGameMode);
 
-	EnforceCost = BSGameMode->GetEnforceCost();
-
 }
 
 void UBSInvenComponent::MaterialSetZero()
@@ -116,6 +114,21 @@ void UBSInvenComponent::RerollMaterial()
 	{
 		int32 NewMaterialNum = MaterialDistribute[i] - MaterialDistribute[i - 1];
 		*MaterialNum.Find(static_cast<EAttackMaterial>(i - 1)) = NewMaterialNum;
+	}
+
+}
+
+bool UBSInvenComponent::CoinUseRestoreHealth()
+{
+	if (CoinNum < RestoreCost)
+	{
+		return false;
+	}
+	else
+	{
+		CoinNum -= RestoreCost;
+		RestoreCost *= RestoreRate;
+		return true;
 	}
 
 }

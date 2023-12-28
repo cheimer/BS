@@ -29,12 +29,17 @@ public:
 	bool CanAttackMaterialEnforce(EAttackMaterial AttackMaterial);
 
 	void RerollMaterial();
+	bool CoinUseRestoreHealth();
+	int GetRestoreCost() { return RestoreCost; }
 
 protected:
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere, Category = "Reroll", meta = (ClampMin = 0, ClampMax = 1.0))
+	UPROPERTY(EditAnywhere, Category = "UseInven", meta = (ClampMin = 0, ClampMax = 1.0))
 	float RerollRate = 0.5f;
+
+	UPROPERTY(EditAnywhere, Category = "UseInven")
+	float RestoreRate = 2.0f;
 
 private:
 	void MaterialSetZero();
@@ -45,5 +50,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Item")
 	TMap<EAttackMaterial, int> MaterialNum;
 
-	int EnforceCost;
+	UPROPERTY(EditDefaultsOnly, Category = "UseInven")
+	int EnforceCost = 1;
+
+	UPROPERTY(EditDefaultsOnly, Category = "UseInven")
+	int RestoreCost = 10;
 };

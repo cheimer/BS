@@ -31,6 +31,7 @@ void ABSGameModeBase::BeginPlay()
 	FTimerHandle Timer;
 	GetWorldTimerManager().SetTimer(Timer, this, &ABSGameModeBase::SpawnEnemyTimer, 2.0f, true);
 
+	SetMapMaterialRand();
 }	
 
 void ABSGameModeBase::Tick(float DeltaTime)
@@ -89,6 +90,12 @@ FVector ABSGameModeBase::CalcSpawnLocation()
 	SpawnLocation.Z = PlayerLocation.Z;
 
 	return SpawnLocation;
+}
+
+void ABSGameModeBase::SetMapMaterialRand()
+{
+	int32 Index = FMath::RandRange(0, 5);
+	MapMaterial = StaticCast<EAttackMaterial>(Index);
 }
 
 void ABSGameModeBase::TimeOver()

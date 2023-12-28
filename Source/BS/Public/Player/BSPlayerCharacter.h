@@ -53,7 +53,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void RerollMaterial();
-
+	UFUNCTION(BlueprintCallable)
+	void RestoreHealth();
+	UFUNCTION(BlueprintCallable)
+	int32 GetRestoreHealthCoin();
 protected:
 	virtual void BeginPlay() override;
 

@@ -189,3 +189,19 @@ void ABSPlayerCharacter::RerollMaterial()
 {
 	BSInvenComponent->RerollMaterial();
 }
+
+void ABSPlayerCharacter::RestoreHealth()
+{
+	if (!BSHealthComponent->IsFullHealth())
+	{
+		if (BSInvenComponent->CoinUseRestoreHealth())
+		{
+			BSHealthComponent->SetHealthFull();
+		}
+	}
+}
+
+int32 ABSPlayerCharacter::GetRestoreHealthCoin()
+{
+	return BSInvenComponent->GetRestoreCost();
+}
