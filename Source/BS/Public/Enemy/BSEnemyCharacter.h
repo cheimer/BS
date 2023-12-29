@@ -63,7 +63,7 @@ protected:
 	FName EnemyName = "";
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "State")
-	bool bUseDataTableEnemy = false;
+	bool bUseDataTableEnemy = true;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "State")
 	class UDataTable* DTEnemy;

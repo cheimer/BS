@@ -8,6 +8,8 @@
 #include "BSGameModeBase.generated.h"
 
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnGameEndSignature, bool);
+
 UCLASS()
 class BS_API ABSGameModeBase : public AGameModeBase
 {
@@ -16,9 +18,12 @@ class BS_API ABSGameModeBase : public AGameModeBase
 public:
 	ABSGameModeBase();
 
+	FOnGameEndSignature OnGameEndSignature;
+
 	virtual void Tick(float DeltaTime) override;
 
-	void PlayerDeath(); //temp
+	void PlayerDeath();
+	void EnemyDeath();
 
 	UFUNCTION(BlueprintCallable)
 	float GetRemainTime();
@@ -26,7 +31,13 @@ public:
 	UFUNCTION(BlueprintCallable)
 	EAttackMaterial GetMapMaterial() { return MapMaterial; }
 
+	UFUNCTION(BlueprintCallable)
+	bool IsClear() { return bClear; }
+
 	bool IsAdvantageType(EAttackMaterial Attacker, EAttackMaterial Defender);
+
+	UFUNCTION(BlueprintCallable)
+	int32 GetEnemyNum() { return EnemyNum; }
 
 protected:
 	virtual void BeginPlay() override;
@@ -43,13 +54,17 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "DefaultSetting")
 	FBox2D MapSize;
 
-	UPROPERTY(BlueprintReadOnly)
-	bool isClear = false;
+	bool bClear = false;
+
+	UPROPERTY(EditDefaultsOnly, Category = "DefaultSetting")
+	int32 MaxEnemyNum = 99;
+	int32 EnemyNum = 0;
 
 private:
 	void TimeOver();
+	void EnemyOver();
 	FVector CalcSpawnLocation();
-	void SetMapMaterialRand();
+	void SpawnEnemyNumAdd();
 
 	float GameStartTime = -1.0f;
 	float RemainTime = -1.0f;

@@ -9,6 +9,7 @@
 #include "BSComponent/BSHealthComponent.h"
 #include "BSComponent/BSItemDropComponent.h"
 #include "World/BSGameModeBase.h"
+#include "World/BSGameInstance.h"
 #include "BSCoreTypes.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -89,6 +90,10 @@ void ABSEnemyCharacter::PlayAttackAnim()
 void ABSEnemyCharacter::OnDeath(AActor* DeathActor)
 {
 	if (!DeathActor->IsA(this->StaticClass())) return;
+
+	auto GameMode = Cast<ABSGameModeBase>(GetWorld()->GetAuthGameMode());
+	if (!GameMode) return;
+	GameMode->EnemyDeath();
 
 	PlayAnimMontage(DeathAnim);
 

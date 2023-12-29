@@ -4,6 +4,7 @@
 #include "BSComponent/BSPlayerAttackComponent.h"
 #include "Player/Weapon/BSPlayerWeapon.h"
 #include "World/BSGameModeBase.h"
+#include "World/BSGameInstance.h"
 #include "BSCoreTypes.h"
 #include "TimerManager.h"
 #include "NiagaraComponent.h"
@@ -19,13 +20,29 @@ void UBSPlayerAttackComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
+	check(DTWeapon);
 	AttackMaterialSetting();
-	if (bUseDataTableWeapon)
-	{
-		check(DTWeapon);
-		SetWeaponDefault();
-	}
+	AttackTypeSetting();
+
 	SetAttackTypesTimer();
+
+	auto GameMode = Cast<ABSGameModeBase>(GetWorld()->GetAuthGameMode());
+	if (!GameMode) return;
+
+	GameMode->OnGameEndSignature.AddUObject(this, &UBSPlayerAttackComponent::OnGameEnd);
+}
+
+void UBSPlayerAttackComponent::OnGameEnd(bool bClear)
+{
+	if (bClear)
+	{
+		SetGameInstanceMaterialLevel();
+		SetGameInstanceTypeLevel();
+	}
+	else
+	{
+		//
+	}
 
 }
 
@@ -152,35 +169,59 @@ int UBSPlayerAttackComponent::GetAttackMaterialLevel(EAttackMaterial AttackMater
 	return AttackMaterialLevel[AttackMaterial];
 }
 
-void UBSPlayerAttackComponent::SetWeaponDefault()
+void UBSPlayerAttackComponent::AttackTypeSetting()
 {
+	const auto GameIns = Cast<UBSGameInstance>(GetWorld()->GetGameInstance());
+	if (!GameIns) return;
+
 	TArray<FName> AttackNames = DTWeapon->GetRowNames();
 
+	int index = 0;
 	for (FName AttackName : AttackNames)
 	{
-		FAttackState* DTAttackState = DTWeapon->FindRow<FAttackState>(AttackName, "");
-		int index = AttackTypeToIndex(DTAttackState->AttackType);
-
-		WeaponData[index].AttackType = DTAttackState->AttackType;
-		WeaponData[index].AttackLevel = DTAttackState->AttackLevel;
-		WeaponData[index].AttackDelay = DTAttackState->AttackDelay;
-		WeaponData[index].DamageDefault = DTAttackState->DamageDefault;
-		WeaponData[index].EnemyHitNum = DTAttackState->EnemyHitNum;
-		WeaponData[index].AuraDefaultSize = DTAttackState->AuraDefaultSize;
-		WeaponData[index].AuraSize = DTAttackState->AuraSize;
-		WeaponData[index].SpellDefaultSize = DTAttackState->SpellDefaultSize;
-		WeaponData[index].SpellSize = DTAttackState->SpellSize;
+		FAttackState DTAttackState = *DTWeapon->FindRow<FAttackState>(AttackName, "");
+		WeaponData.Add(DTAttackState);
+		
+		WeaponData[index].AttackLevel = *GameIns->TypeLevel.Find(WeaponData[index].AttackType);
+		index++;
 	}
 
 }
 
 void UBSPlayerAttackComponent::AttackMaterialSetting()
 {
-	AttackMaterialLevel.Add(EAttackMaterial::Dark, 1);
-	AttackMaterialLevel.Add(EAttackMaterial::Shine, 1);
-	AttackMaterialLevel.Add(EAttackMaterial::Fire, 1);
-	AttackMaterialLevel.Add(EAttackMaterial::Ice, 1);
-	AttackMaterialLevel.Add(EAttackMaterial::Water, 1);
-	AttackMaterialLevel.Add(EAttackMaterial::Thunder, 1);
-	CurrentAttackMaterial = EAttackMaterial::Thunder;
+	const auto GameIns = Cast<UBSGameInstance>(GetWorld()->GetGameInstance());
+	if (!GameIns) return;
+
+	for (int index = 0; index < GameIns->MaterialLevel.Num(); index++)
+	{
+		EAttackMaterial AttackMaterial = StaticCast<EAttackMaterial>(index);
+		AttackMaterialLevel.Add(AttackMaterial, *GameIns->MaterialLevel.Find(AttackMaterial));
+	}
+
+	CurrentAttackMaterial = GameIns->CurrentMaterial;
+}
+
+void UBSPlayerAttackComponent::SetGameInstanceTypeLevel()
+{
+	const auto GameIns = Cast<UBSGameInstance>(GetWorld()->GetGameInstance());
+	if (!GameIns) return;
+
+	for (auto AttackTypeState : WeaponData)
+	{
+		*GameIns->TypeLevel.Find(AttackTypeState.AttackType) = AttackTypeState.AttackLevel;
+	}
+
+}
+
+void UBSPlayerAttackComponent::SetGameInstanceMaterialLevel()
+{
+	const auto GameIns = Cast<UBSGameInstance>(GetWorld()->GetGameInstance());
+	if (!GameIns) return;
+
+	for (auto AttackMaterialState : AttackMaterialLevel)
+	{
+		*GameIns->MaterialLevel.Find(AttackMaterialState.Key) = AttackMaterialState.Value;
+	}
+
 }

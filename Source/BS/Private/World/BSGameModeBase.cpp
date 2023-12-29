@@ -16,21 +16,23 @@ ABSGameModeBase::ABSGameModeBase()
 	DefaultPawnClass = ABSPlayerCharacter::StaticClass();
 	PlayerControllerClass = ABSPlayerController::StaticClass();
 	HUDClass = ABSGameHUD::StaticClass();
-
 }
 
 void ABSGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	isClear = false;
+	bClear = false;
 
 	GameStartTime = GetWorld()->GetTimeSeconds();
 
 	FTimerHandle Timer;
 	GetWorldTimerManager().SetTimer(Timer, this, &ABSGameModeBase::SpawnEnemyTimer, 2.0f, true);
 
-	SetMapMaterialRand();
+	const auto GameIns = Cast<UBSGameInstance>(GetWorld()->GetGameInstance());
+	if (!GameIns) return;
+
+	MapMaterial = GameIns->MapMaterial;
 }	
 
 void ABSGameModeBase::Tick(float DeltaTime)
@@ -43,6 +45,7 @@ void ABSGameModeBase::Tick(float DeltaTime)
 	{
 		TimeOver();
 	}
+
 }
 
 void ABSGameModeBase::SpawnEnemyTimer()
@@ -57,7 +60,13 @@ void ABSGameModeBase::SpawnEnemyTimer()
 			SpawnLocation = CalcSpawnLocation();
 			FRotator SpawnRotator(0.0f, FMath::RandRange(0.0f, 360.0f), 0.0f);
 			auto SpawnedEnemy = GetWorld()->SpawnActor<ABSEnemyCharacter>(EnemyListClass[Enemy.Key], SpawnLocation, SpawnRotator);
+			EnemyNum++;
 		}
+	}
+
+	if (EnemyNum > MaxEnemyNum)
+	{
+		EnemyOver();
 	}
 
 }
@@ -90,12 +99,6 @@ FVector ABSGameModeBase::CalcSpawnLocation()
 	return SpawnLocation;
 }
 
-void ABSGameModeBase::SetMapMaterialRand()
-{
-	int32 Index = FMath::RandRange(0, 5);
-	MapMaterial = StaticCast<EAttackMaterial>(Index);
-}
-
 void ABSGameModeBase::TimeOver()
 {
 	const auto Controller = GetWorld()->GetFirstPlayerController();
@@ -104,14 +107,32 @@ void ABSGameModeBase::TimeOver()
 	const auto GameHUD = Cast<ABSGameHUD>(Controller->GetHUD());
 	if (!GameHUD) return;
 
-	isClear = true;
+	const auto GameIns = Cast<UBSGameInstance>(GetWorld()->GetGameInstance());
+	if (!GameIns) return;
+
+	bClear = true;
+	OnGameEndSignature.Broadcast(bClear);
+
+	GameIns->MapLevel++;
+	GameIns->MapMaterial = MapMaterial;
+
+	SpawnEnemyNumAdd();
 	GameHUD->ChangeWidget(EGameWidgetMode::GameEnd);
 
 }
 
-float ABSGameModeBase::GetRemainTime()
+void ABSGameModeBase::EnemyOver()
 {
-	return RemainTime;
+	const auto Controller = GetWorld()->GetFirstPlayerController();
+	if (!Controller) return;
+
+	const auto GameHUD = Cast<ABSGameHUD>(Controller->GetHUD());
+	if (!GameHUD) return;
+
+	bClear = false;
+	OnGameEndSignature.Broadcast(bClear);
+
+	GameHUD->ChangeWidget(EGameWidgetMode::GameEnd);
 }
 
 void ABSGameModeBase::PlayerDeath()
@@ -122,8 +143,32 @@ void ABSGameModeBase::PlayerDeath()
 	const auto GameHUD = Cast<ABSGameHUD>(Controller->GetHUD());
 	if (!GameHUD) return;
 
-	isClear = false;
+	bClear = false;
+	OnGameEndSignature.Broadcast(bClear);
+
 	GameHUD->ChangeWidget(EGameWidgetMode::GameEnd);
+}
+
+void ABSGameModeBase::EnemyDeath()
+{
+	EnemyNum--;
+}
+
+void ABSGameModeBase::SpawnEnemyNumAdd()
+{
+	const auto GameIns = Cast<UBSGameInstance>(GetWorld()->GetGameInstance());
+	if (!GameIns) return;
+
+	for (auto EnemyListIndex : GameIns->EnemyList)
+	{
+		GameIns->EnemyList[EnemyListIndex.Key] += 1;
+	}
+
+}
+
+float ABSGameModeBase::GetRemainTime()
+{
+	return RemainTime;
 }
 
 bool ABSGameModeBase::IsAdvantageType(EAttackMaterial Attacker, EAttackMaterial Defender)

@@ -35,6 +35,9 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	UFUNCTION()
+	void OnGameEnd(bool bClear);
+
 	UPROPERTY(EditAnywhere, Category = "UseInven", meta = (ClampMin = 0, ClampMax = 1.0))
 	float RerollRate = 0.5f;
 
@@ -42,7 +45,8 @@ protected:
 	float RestoreRate = 2.0f;
 
 private:
-	void MaterialSetZero();
+	void SetMaterialNum();
+	void SetGameInstanceMaterialNum();
 
 	UPROPERTY(EditAnywhere, Category = "Item")
 	int32 CoinNum = 0;
@@ -53,9 +57,7 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "UseInven")
 	int EnforceCost = 1;
 
-	UPROPERTY(EditDefaultsOnly, Category = "UseInven")
-	int RestoreCost = 10;
+	int RestoreCost;
 
-	UPROPERTY(EditDefaultsOnly, Category = "UseInven")
-	int MinRestoreCost = 10;
+	int MinRestoreCost;
 };

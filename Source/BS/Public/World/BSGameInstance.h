@@ -16,13 +16,42 @@ class BS_API UBSGameInstance : public UGameInstance
 public:
 	UBSGameInstance();
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	TMap<EEnemyList, int32> EnemyList;
-
 	UFUNCTION(BlueprintCallable)
 	void SetEnemyList(EEnemyList Enemy, int32 EnemyNum);
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TMap<EEnemyList, int32> EnemyList;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	int32 MapLevel;
+	EAttackMaterial MapMaterial;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TMap<EAttackType, int32> TypeLevel;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TMap<EAttackMaterial, int32> MaterialLevel;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TMap<EAttackMaterial, int32> MaterialNum;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	int32 CoinNum;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	int32 RestoreHealthCost;
+
+	float PlayerCurrentHealth;
+	EAttackMaterial CurrentMaterial;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	float PlayerMaxHealth = 100.0f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	int32 MinRestoreCost = 10;
+
 private:
 	void EnemyListDefaultSetting();
+	void TypeLevelDefaultSetting();
+	void MaterialLevelDefaultSetting();
+	void MaterialNumDefaultSetting();
 
 };

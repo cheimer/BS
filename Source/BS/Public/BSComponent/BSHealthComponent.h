@@ -26,6 +26,9 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	UFUNCTION()
+	void OnGameEnd(bool bClear);
+
 private:
 	void SetHealth(float NewHealth);
 

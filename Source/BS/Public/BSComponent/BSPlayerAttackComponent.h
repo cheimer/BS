@@ -30,17 +30,16 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	UFUNCTION()
+	void OnGameEnd(bool bClear);
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	TArray<TSubclassOf<ABSPlayerWeapon>> PlayerWeaponClass;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	TArray<FAttackState> WeaponData;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	TMap<EAttackMaterial, int> AttackMaterialLevel;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
-	bool bUseDataTableWeapon = false;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Weapon")
 	class UDataTable* DTWeapon;
@@ -52,13 +51,15 @@ protected:
 	FColor DebugSphereColor = FColor::Black;
 
 private:
-	void SetWeaponDefault();
-
 	UFUNCTION()
 	void PlayerAttack(ABSPlayerWeapon* PlayerWeapon, FAttackState WeaponState);
 
 	void SetAttackTypesTimer();
+
 	void AttackMaterialSetting();
+	void AttackTypeSetting();
+	void SetGameInstanceMaterialLevel();
+	void SetGameInstanceTypeLevel();
 
 	int AttackTypeToIndex(EAttackType AttackType);
 

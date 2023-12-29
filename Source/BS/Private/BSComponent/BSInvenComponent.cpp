@@ -4,7 +4,8 @@
 #include "BSComponent/BSInvenComponent.h"
 #include "Player/BSPlayerCharacter.h"
 #include "Item/ItemBase.h"
-#include "BSGameModeBase.h"
+#include "World/BSGameModeBase.h"
+#include "World/BSGameInstance.h"
 
 UBSInvenComponent::UBSInvenComponent()
 {
@@ -16,21 +17,64 @@ void UBSInvenComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	MaterialSetZero();
+	const auto GameIns = Cast<UBSGameInstance>(GetWorld()->GetGameInstance());
+	if (!GameIns) return;
 
-	auto BSGameMode = Cast<ABSGameModeBase>(GetWorld()->GetAuthGameMode());
-	check(BSGameMode);
+	CoinNum = GameIns->CoinNum;
+	RestoreCost = GameIns->RestoreHealthCost;
+	MinRestoreCost = GameIns->MinRestoreCost;
+	SetMaterialNum();
+
+	auto GameMode = Cast<ABSGameModeBase>(GetWorld()->GetAuthGameMode());
+	if (!GameMode) return;
+
+	GameMode->OnGameEndSignature.AddUObject(this, &UBSInvenComponent::OnGameEnd);
+}
+
+void UBSInvenComponent::SetMaterialNum()
+{
+	const auto GameIns = Cast<UBSGameInstance>(GetWorld()->GetGameInstance());
+	if (!GameIns) return;
+
+	for (int index = 0; index < GameIns->MaterialNum.Num(); index++)
+	{
+		EAttackMaterial AttackMaterial = StaticCast<EAttackMaterial>(index);
+		MaterialNum.Add(AttackMaterial, *GameIns->MaterialNum.Find(AttackMaterial));
+	}
+}
+
+void UBSInvenComponent::OnGameEnd(bool bClear)
+{
+	const auto GameIns = Cast<UBSGameInstance>(GetWorld()->GetGameInstance());
+	if (!GameIns) return;
+
+	if (bClear)
+	{
+		if (RestoreCost >= MinRestoreCost * 2)
+		{
+			RestoreCost /= 2.0f;
+		}
+		GameIns->RestoreHealthCost = RestoreCost;
+		GameIns->CoinNum = CoinNum;
+		SetGameInstanceMaterialNum();
+	}
+	else
+	{
+		//
+	}
 
 }
 
-void UBSInvenComponent::MaterialSetZero()
+void UBSInvenComponent::SetGameInstanceMaterialNum()
 {
-	MaterialNum.Add(EAttackMaterial::Dark, 0);
-	MaterialNum.Add(EAttackMaterial::Shine, 0);
-	MaterialNum.Add(EAttackMaterial::Fire, 0);
-	MaterialNum.Add(EAttackMaterial::Ice, 0);
-	MaterialNum.Add(EAttackMaterial::Water, 0);
-	MaterialNum.Add(EAttackMaterial::Thunder, 0);
+	const auto GameIns = Cast<UBSGameInstance>(GetWorld()->GetGameInstance());
+	if (!GameIns) return;
+
+	for (auto MaterialPair : MaterialNum)
+	{
+		*GameIns->MaterialNum.Find(MaterialPair.Key) = MaterialPair.Value;
+	}
+
 }
 
 void UBSInvenComponent::GetItem(AItemBase* const Item)

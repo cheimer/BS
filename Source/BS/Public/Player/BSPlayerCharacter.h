@@ -29,8 +29,6 @@ public:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	float GetHealth() { return MaxHealth; }
-
 	void GetItem(class AItemBase* const Item);
 	EAttackMaterial GetCurrentAttackMaterial();
 
@@ -91,9 +89,6 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Move")
 	float WalkSpeed = 600.0f;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "State")
-	float MaxHealth = 100.0f;
 
 	UPROPERTY(EditDefaultsOnly, Category = "EnhancedInput")
 	UInputMappingContext* PlayerInputMapping;
