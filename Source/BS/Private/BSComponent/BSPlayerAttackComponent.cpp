@@ -3,6 +3,7 @@
 
 #include "BSComponent/BSPlayerAttackComponent.h"
 #include "Player/Weapon/BSPlayerWeapon.h"
+#include "World/BSGameModeBase.h"
 #include "BSCoreTypes.h"
 #include "TimerManager.h"
 #include "NiagaraComponent.h"
@@ -101,9 +102,20 @@ float UBSPlayerAttackComponent::GetWeaponDamage(EAttackType AttackType)
 	int index = AttackTypeToIndex(AttackType);
 	if (index < 0) return -1;
 
-	auto MaterialDamage = *AttackMaterialLevel.Find(CurrentAttackMaterial) * WeaponData[index].DamageDefault;
+	float MaterialDamage = *AttackMaterialLevel.Find(CurrentAttackMaterial) * WeaponData[index].DamageDefault;
+	float TypeDamage = WeaponData[index].DamageDefault * WeaponData[index].AttackLevel;
 
-	return WeaponData[index].DamageDefault * WeaponData[index].AttackLevel + MaterialDamage;
+	auto GameMode = Cast<ABSGameModeBase>(GetWorld()->GetAuthGameMode());
+	if (!GameMode) return false;
+
+	if (GameMode->IsAdvantageType(CurrentAttackMaterial, GameMode->GetMapMaterial()))
+	{
+		return (TypeDamage + MaterialDamage) * 1.5f;
+	}
+	else
+	{
+		return TypeDamage + MaterialDamage;
+	}
 }
 
 void UBSPlayerAttackComponent::ChangeMaterialSequence()

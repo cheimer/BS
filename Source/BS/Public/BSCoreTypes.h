@@ -54,7 +54,7 @@ struct FAttackState : public FTableRowBase
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "State")
 	float AttackDelay = 1.0f;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "State", meta = (ToolTip = "Under 0 is Unlimited"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "State", meta = (ToolTip = "Under 0 is Unlimited", EditCondition = "AttackType == EAttackType::Arrow"))
 	int32 EnemyHitNum = -1;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "State", meta = (EditCondition = "AttackType == EAttackType::Melee"))

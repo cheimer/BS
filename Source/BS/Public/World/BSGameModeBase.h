@@ -18,12 +18,15 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
+	void PlayerDeath(); //temp
+
 	UFUNCTION(BlueprintCallable)
 	float GetRemainTime();
 
-	void PlayerDeath();
-
+	UFUNCTION(BlueprintCallable)
 	EAttackMaterial GetMapMaterial() { return MapMaterial; }
+
+	bool IsAdvantageType(EAttackMaterial Attacker, EAttackMaterial Defender);
 
 protected:
 	virtual void BeginPlay() override;

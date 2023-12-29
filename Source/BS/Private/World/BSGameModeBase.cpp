@@ -7,7 +7,6 @@
 #include "Enemy/BSEnemyCharacter.h"
 #include "UI/BSGameHUD.h"
 #include "Kismet/GameplayStatics.h"
-#include "Kismet/KismetMathLibrary.h"
 #include "World/BSGameInstance.h"
 
 ABSGameModeBase::ABSGameModeBase()
@@ -85,9 +84,8 @@ FVector ABSGameModeBase::CalcSpawnLocation()
 		}
 		SpawnLocation2D = FMath::RandPointInCircle(MaxSpawnRadius);
 	}
-
-	FVector SpawnLocation = UKismetMathLibrary::Conv_Vector2DToVector(SpawnLocation2D);
-	SpawnLocation.Z = PlayerLocation.Z;
+	
+	FVector SpawnLocation(SpawnLocation2D.X, SpawnLocation2D.Y, PlayerLocation.Z);
 
 	return SpawnLocation;
 }
@@ -126,4 +124,22 @@ void ABSGameModeBase::PlayerDeath()
 
 	isClear = false;
 	GameHUD->ChangeWidget(EGameWidgetMode::GameEnd);
+}
+
+bool ABSGameModeBase::IsAdvantageType(EAttackMaterial Attacker, EAttackMaterial Defender)
+{
+	if (Attacker == EAttackMaterial::Dark && Defender == EAttackMaterial::Shine)
+		return true;
+	if (Attacker == EAttackMaterial::Shine && Defender == EAttackMaterial::Dark)
+		return true;
+	if (Attacker == EAttackMaterial::Fire && Defender == EAttackMaterial::Ice)
+		return true;
+	if (Attacker == EAttackMaterial::Ice && Defender == EAttackMaterial::Thunder)
+		return true;
+	if (Attacker == EAttackMaterial::Thunder && Defender == EAttackMaterial::Water)
+		return true;
+	if (Attacker == EAttackMaterial::Water && Defender == EAttackMaterial::Fire)
+		return true;
+
+	return false;
 }

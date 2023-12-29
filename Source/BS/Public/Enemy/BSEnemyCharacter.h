@@ -26,6 +26,8 @@ public:
 
 	bool IsDead();	
 
+	float CalcDamage();
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AI")
 	UBehaviorTree* BehaviorTree;
 

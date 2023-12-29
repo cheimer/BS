@@ -136,6 +136,11 @@ void ABSPlayerCharacter::GetItem(AItemBase* const Item)
 	BSInvenComponent->GetItem(Item);
 }
 
+EAttackMaterial ABSPlayerCharacter::GetCurrentAttackMaterial()
+{
+	return BSAttackComponent->CurrentAttackMaterial;
+}
+
 void ABSPlayerCharacter::AttackTypeEnforce(EAttackType AttackType)
 {
 	if (BSInvenComponent->CanAttackTypeEnforce())

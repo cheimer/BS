@@ -32,6 +32,7 @@ public:
 	float GetHealth() { return MaxHealth; }
 
 	void GetItem(class AItemBase* const Item);
+	EAttackMaterial GetCurrentAttackMaterial();
 
 	UFUNCTION(BlueprintCallable)
 	void AttackTypeEnforce(EAttackType AttackType);

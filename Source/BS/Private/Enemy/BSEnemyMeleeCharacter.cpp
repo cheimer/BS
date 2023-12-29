@@ -15,7 +15,7 @@ void ABSEnemyMeleeCharacter::OnAttack(AActor* Attacker)
 	{
 		if (const auto Player = Cast<ABSPlayerCharacter>(OverlapActor))
 		{
-			Player->TakeDamage(States.Damage, FDamageEvent::FDamageEvent(), GetController(), this);
+			Player->TakeDamage(CalcDamage(), FDamageEvent::FDamageEvent(), GetController(), this);
 		}
 	}
 

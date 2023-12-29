@@ -34,8 +34,4 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Anim", meta = (EditCondition = "HaveWeaponAnim"))
 	UAnimMontage* WeaponAnim;
 
-private:
-	void AttackArrow(AActor* Attacker);
-	void AttackSpell(AActor* Attacker);
-
 };

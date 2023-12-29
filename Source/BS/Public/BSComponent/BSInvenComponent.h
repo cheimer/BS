@@ -55,4 +55,7 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "UseInven")
 	int RestoreCost = 10;
+
+	UPROPERTY(EditDefaultsOnly, Category = "UseInven")
+	int MinRestoreCost = 10;
 };

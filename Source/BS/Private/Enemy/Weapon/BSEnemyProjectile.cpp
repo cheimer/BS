@@ -51,7 +51,8 @@ void ABSEnemyProjectile::OnArrowHit(UPrimitiveComponent* OverlappedComponent, AA
 		const auto Enemy = Cast<ABSEnemyCharacter>(GetOwner());
 		if (!Player || !Enemy) return;
 
-		Player->TakeDamage(Enemy->States.Damage, FDamageEvent::FDamageEvent(), Enemy->GetController(), this);
+		
+		Player->TakeDamage(Enemy->CalcDamage(), FDamageEvent::FDamageEvent(), Enemy->GetController(), this);
 
 		Destroy();
 	}

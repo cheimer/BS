@@ -36,15 +36,6 @@ void ABSWeaponSpell::SetDefaultOption()
 
 void ABSWeaponSpell::SetSpellLevelAdd()
 {
-	if (AttackState.EnemyHitNum == -1)
-	{
-		return;
-	}
-	else
-	{
-		AttackState.EnemyHitNum += AttackState.AttackLevel / HitNumAddLevel;
-	}
-	
 	if (AttackState.SpellSize / AttackState.SpellDefaultSize >= 3.0f)
 	{
 		return;

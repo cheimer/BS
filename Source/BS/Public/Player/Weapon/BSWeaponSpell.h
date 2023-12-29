@@ -24,9 +24,6 @@ protected:
 	float LifeTime = 2.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spell", meta = (ClampMin = 1))
-	int32 HitNumAddLevel = 5;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spell", meta = (ClampMin = 1))
 	int32 SizeAddLevel = 5;
 
 private:

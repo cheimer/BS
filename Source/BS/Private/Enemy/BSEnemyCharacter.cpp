@@ -8,6 +8,7 @@
 #include "Animation/BSAttackAnimNotify.h"
 #include "BSComponent/BSHealthComponent.h"
 #include "BSComponent/BSItemDropComponent.h"
+#include "World/BSGameModeBase.h"
 #include "BSCoreTypes.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -109,6 +110,27 @@ void ABSEnemyCharacter::OnDeath(AActor* DeathActor)
 bool ABSEnemyCharacter::IsDead()
 {
 	return HealthComponent->IsDead();
+}
+
+float ABSEnemyCharacter::CalcDamage()
+{
+	auto GameMode = Cast<ABSGameModeBase>(GetWorld()->GetAuthGameMode());
+	if (!GameMode) return false;
+
+	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
+	if (!PlayerController) return -1;
+
+	const auto Player = Cast<ABSPlayerCharacter>(PlayerController->GetPawn());
+	if (!Player) return -1;
+
+	if (GameMode->IsAdvantageType(GameMode->GetMapMaterial(), Player->GetCurrentAttackMaterial()))
+	{
+		return States.Damage * 1.5f;
+	}
+	else
+	{
+		return States.Damage;
+	}
 }
 
 float ABSEnemyCharacter::GetDistancePlayer() const
