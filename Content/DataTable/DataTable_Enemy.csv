@@ -1,7 +1,7 @@
 ---,Speed,Health,DefaultDropMaterial,DefaultDropCoin,DropMultiplier,Damage,SearchRange,AttackRange,AttackDelay,AttackType
 Goblin,400,100,10,10,1,10,1500,100,1.2,Melee
 Ghoul,750,50,10,10,1,10,1500,100,1,Melee
-SkelBow,200,100,10,10,1,10,1500,800,1,Arrow
-SkelSword,400,100,10,10,1,20,1500,160,1,Melee
-Zombie,300,300,10,10,1,50,1500,180,2.5,Melee
+SkelBow,200,100,5,10,1,10,1500,800,1,Arrow
+SkelSword,400,100,20,10,1,20,1500,160,1,Melee
+Zombie,300,300,30,10,1,50,1500,180,2.5,Melee
 Lich,400,100,10,10,1,10,1500,800,1,Spell

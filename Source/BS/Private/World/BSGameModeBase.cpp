@@ -113,8 +113,9 @@ void ABSGameModeBase::TimeOver()
 	bClear = true;
 	OnGameEndSignature.Broadcast(bClear);
 
+	int MaterialRandNum = FMath::RandRange(0, GameIns->MaterialLevel.Num() - 1);
+	GameIns->MapMaterial = StaticCast<EAttackMaterial>(MaterialRandNum);
 	GameIns->MapLevel++;
-	GameIns->MapMaterial = MapMaterial;
 
 	SpawnEnemyNumAdd();
 	GameHUD->ChangeWidget(EGameWidgetMode::GameEnd);
@@ -159,11 +160,13 @@ void ABSGameModeBase::SpawnEnemyNumAdd()
 	const auto GameIns = Cast<UBSGameInstance>(GetWorld()->GetGameInstance());
 	if (!GameIns) return;
 
-	for (auto EnemyListIndex : GameIns->EnemyList)
+	if (GameIns->MapLevel % SpawnEnemyAddRound == 0)
 	{
-		GameIns->EnemyList[EnemyListIndex.Key] += 1;
+		for (auto EnemyListIndex : GameIns->EnemyList)
+		{
+			GameIns->EnemyList[EnemyListIndex.Key] += 1;
+		}
 	}
-
 }
 
 float ABSGameModeBase::GetRemainTime()

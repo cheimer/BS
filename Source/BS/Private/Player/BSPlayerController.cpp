@@ -18,6 +18,7 @@ void ABSPlayerController::BeginPlay()
 	check(BSHUD);
 
 	SetInputMode(FInputModeGameOnly());
+	bShowMouseCursor = false;
 
 	if (UEnhancedInputLocalPlayerSubsystem* Subsystem =
 		ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))

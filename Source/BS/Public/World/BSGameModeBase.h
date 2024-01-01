@@ -58,6 +58,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "DefaultSetting")
 	int32 MaxEnemyNum = 99;
+
+	UPROPERTY(EditDefaultsOnly, Category = "DefaultSetting")
+	int32 SpawnEnemyAddRound = 3;
 	int32 EnemyNum = 0;
 
 private:
