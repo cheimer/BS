@@ -43,7 +43,7 @@ public:
 	EAttackMaterial CurrentMaterial;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	float PlayerMaxHealth = 100.0f;
+	float PlayerMaxHealth = 200.0f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	int32 MinRestoreCost = 10;

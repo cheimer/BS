@@ -159,11 +159,13 @@ void ABSGameModeBase::SpawnEnemyNumAdd()
 	const auto GameIns = Cast<UBSGameInstance>(GetWorld()->GetGameInstance());
 	if (!GameIns) return;
 
-	for (auto EnemyListIndex : GameIns->EnemyList)
+	if (GameIns->MapLevel % SpawnEnemyAddRound == 0)
 	{
-		GameIns->EnemyList[EnemyListIndex.Key] += 1;
+		for (auto EnemyListIndex : GameIns->EnemyList)
+		{
+			GameIns->EnemyList[EnemyListIndex.Key] += 1;
+		}
 	}
-
 }
 
 float ABSGameModeBase::GetRemainTime()

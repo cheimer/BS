@@ -43,7 +43,7 @@ struct FAttackState : public FTableRowBase
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "State")
-	EAttackType AttackType;
+	EAttackType AttackType = EAttackType::Melee;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "State")
 	int32 AttackLevel = 0;
