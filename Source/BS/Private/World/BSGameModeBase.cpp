@@ -164,7 +164,10 @@ void ABSGameModeBase::SpawnEnemyNumAdd()
 	{
 		for (auto EnemyListIndex : GameIns->EnemyList)
 		{
-			GameIns->EnemyList[EnemyListIndex.Key] += 1;
+			if (GameIns->EnemyList[EnemyListIndex.Key] != 0)
+			{
+				GameIns->EnemyList[EnemyListIndex.Key] += 1;
+			}
 		}
 	}
 }
